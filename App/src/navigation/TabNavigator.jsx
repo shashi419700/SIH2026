@@ -7,7 +7,7 @@ import HomeScreen from "../app/home";
 import ProfileScreen from "../app/profile";
 import AvailableServiceScreen from "../app/AvalibleService";
 import EmergencyScreen from "../app/EmergencyScreen";
-import MapScreen from "../app/MapScreen";
+import MapScreen from "../app/MapScreen.jsx";
 
 const Tab = createBottomTabNavigator();
 

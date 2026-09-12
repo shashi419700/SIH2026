@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import {
   Alert,
   Modal,
@@ -18,7 +18,11 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
+/* ============================================================
+   ICON
+============================================================ */
 
 const Icon = memo(function Icon({
   name,
@@ -45,12 +49,11 @@ const Icon = memo(function Icon({
   );
 });
 
-
 /* ============================================================
    PROFILE CARD
 ============================================================ */
 
-function ProfileCard({ dark, onEdit }) { 
+function ProfileCard({ dark, onEdit }) {
   return (
     <View
       style={[
@@ -61,7 +64,6 @@ function ProfileCard({ dark, onEdit }) {
       <View style={styles.profileTop}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>SK</Text>
-
           <View style={styles.onlineDot} />
         </View>
 
@@ -72,7 +74,7 @@ function ProfileCard({ dark, onEdit }) {
               dark && styles.darkText,
             ]}
           >
-           Shashi kumar
+            Shashi Kumar
           </Text>
 
           <Text
@@ -157,61 +159,83 @@ function ProfileStat({ icon, value, label }) {
 }
 
 /* ============================================================
-   PREFERENCE CARD
+   COMPLETE PROFILE CARD
 ============================================================ */
 
-function PreferenceCard({
+function CompleteProfileCard({
   dark,
-  icon,
-  title,
-  subtitle,
-  right,
+  percentage,
   onPress,
 }) {
   return (
     <Pressable
       style={[
-        styles.preferenceCard,
+        styles.completeProfileCard,
         dark && styles.darkSurface,
       ]}
       onPress={onPress}
     >
-      <View style={styles.preferenceIcon}>
-        <Icon
-          name={icon}
-          size={20}
-          color="#2563EB"
-        />
-      </View>
+      <View style={styles.completeProfileTop}>
+        <View style={styles.completeProfileIcon}>
+          <Icon
+            name="person-circle-outline"
+            size={25}
+            color="#2563EB"
+          />
+        </View>
 
-      <View style={styles.preferenceContent}>
-        <Text
-          style={[
-            styles.preferenceTitle,
-            dark && styles.darkText,
-          ]}
-        >
-          {title}
-        </Text>
+        <View style={styles.completeProfileContent}>
+          <View style={styles.completeProfileTitleRow}>
+            <Text
+              style={[
+                styles.completeProfileTitle,
+                dark && styles.darkText,
+              ]}
+            >
+              Complete Your Profile
+            </Text>
 
-        {subtitle ? (
+            <Text style={styles.progressText}>
+              {percentage}%
+            </Text>
+          </View>
+
           <Text
             style={[
-              styles.preferenceSubtitle,
+              styles.completeProfileSubtitle,
               dark && styles.darkMutedText,
             ]}
           >
-            {subtitle}
+            Add your details for a safer journey
+            experience.
           </Text>
-        ) : null}
-      </View>
+        </View>
 
-      {right || (
         <Icon
           name="chevron-forward"
           size={19}
           color="#94A3B8"
         />
+      </View>
+
+      <View style={styles.progressTrack}>
+        <View
+          style={[
+            styles.progressFill,
+            { width: `${percentage}%` },
+          ]}
+        />
+      </View>
+
+      {percentage < 100 ? (
+        <Text style={styles.completeHint}>
+          Complete your profile to improve
+          emergency assistance.
+        </Text>
+      ) : (
+        <Text style={styles.completedHint}>
+          Your profile is complete.
+        </Text>
       )}
     </Pressable>
   );
@@ -263,7 +287,12 @@ function VehicleProfileCard({
         </View>
       </View>
 
-      <View style={styles.vehicleProfile}>
+      <View
+        style={[
+          styles.vehicleProfile,
+          dark && styles.darkInnerSurface,
+        ]}
+      >
         <View style={styles.vehicleLargeIcon}>
           <Icon
             name={vehicleIcon(vehicle)}
@@ -580,7 +609,7 @@ function SavedPlace({
         >
           {title}
         </Text>
-    
+
         <Text
           style={[
             styles.savedPlaceAddress,
@@ -687,6 +716,278 @@ function AccountSection({
   );
 }
 
+function PreferenceCard({
+  dark,
+  icon,
+  title,
+  subtitle,
+  onPress,
+}) {
+  return (
+    <Pressable
+      style={[
+        styles.preferenceCard,
+        dark && styles.darkSurface,
+      ]}
+      onPress={onPress}
+    >
+      <View style={styles.preferenceIcon}>
+        <Icon
+          name={icon}
+          size={20}
+          color="#2563EB"
+        />
+      </View>
+
+      <View style={styles.preferenceContent}>
+        <Text
+          style={[
+            styles.preferenceTitle,
+            dark && styles.darkText,
+          ]}
+        >
+          {title}
+        </Text>
+
+        <Text
+          style={[
+            styles.preferenceSubtitle,
+            dark && styles.darkMutedText,
+          ]}
+        >
+          {subtitle}
+        </Text>
+      </View>
+
+      <Icon
+        name="chevron-forward"
+        size={19}
+        color="#94A3B8"
+      />
+    </Pressable>
+  );
+}
+
+/* ============================================================
+   EMERGENCY CONTACTS
+============================================================ */
+
+function EmergencyContacts({
+  dark,
+  contacts,
+  onAdd,
+  onEdit,
+  onDelete,
+}) {
+  return (
+    <View
+      style={[
+        styles.sectionCard,
+        dark && styles.darkSurface,
+      ]}
+    >
+      <View style={styles.sectionHeader}>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              dark && styles.darkText,
+            ]}
+          >
+            Emergency Contacts
+          </Text>
+
+          <Text
+            style={[
+              styles.sectionSubtitle,
+              dark && styles.darkMutedText,
+            ]}
+          >
+            Add up to 4 people for emergency help
+          </Text>
+        </View>
+
+        <View style={styles.emergencyHeaderIcon}>
+          <Icon
+            name="call"
+            size={18}
+            color="#DC2626"
+          />
+        </View>
+      </View>
+
+      {contacts.length === 0 ? (
+        <View
+          style={[
+            styles.emptyEmergency,
+            dark && styles.darkInnerSurface,
+          ]}
+        >
+          <View style={styles.emptyEmergencyIcon}>
+            <Icon
+              name="people-outline"
+              size={24}
+              color="#2563EB"
+            />
+          </View>
+
+          <Text
+            style={[
+              styles.emptyEmergencyTitle,
+              dark && styles.darkText,
+            ]}
+          >
+            No emergency contact added
+          </Text>
+
+          <Text
+            style={[
+              styles.emptyEmergencySubtitle,
+              dark && styles.darkMutedText,
+            ]}
+          >
+            Add trusted people who can be contacted
+            during an emergency.
+          </Text>
+        </View>
+      ) : (
+        contacts.map((contact, index) => (
+          <EmergencyContactRow
+            key={contact.id}
+            dark={dark}
+            contact={contact}
+            index={index}
+            onEdit={() => onEdit(contact)}
+            onDelete={() => onDelete(contact.id)}
+          />
+        ))
+      )}
+
+      {contacts.length < 4 && (
+        <Pressable
+          style={styles.addEmergencyButton}
+          onPress={onAdd}
+        >
+          <Icon
+            name="add"
+            size={20}
+            color="#2563EB"
+          />
+
+          <Text style={styles.addEmergencyText}>
+            Add Emergency Contact
+          </Text>
+        </Pressable>
+      )}
+
+      <Text
+        style={[
+          styles.contactCount,
+          dark && styles.darkMutedText,
+        ]}
+      >
+        {contacts.length}/4 contacts added
+      </Text>
+    </View>
+  );
+}
+
+function EmergencyContactRow({
+  dark,
+  contact,
+  index,
+  onEdit,
+  onDelete,
+}) {
+  return (
+    <View
+      style={[
+        styles.emergencyContactRow,
+        dark && styles.darkInnerSurface,
+      ]}
+    >
+      <View style={styles.emergencyAvatar}>
+        <Text style={styles.emergencyAvatarText}>
+          {getInitials(contact.name)}
+        </Text>
+      </View>
+
+      <View style={styles.emergencyContactInfo}>
+        <View style={styles.contactNameRow}>
+          <Text
+            style={[
+              styles.emergencyContactName,
+              dark && styles.darkText,
+            ]}
+          >
+            {contact.name}
+          </Text>
+
+          <View style={styles.relationBadge}>
+            <Text style={styles.relationText}>
+              {contact.relation || "Contact"}
+            </Text>
+          </View>
+        </View>
+
+        <Text
+          style={[
+            styles.emergencyContactPhone,
+            dark && styles.darkMutedText,
+          ]}
+        >
+          {contact.phone}
+        </Text>
+
+        <Text style={styles.contactNumber}>
+          Emergency Contact {index + 1}
+        </Text>
+      </View>
+
+      <View style={styles.contactActions}>
+        <Pressable
+          style={styles.smallActionButton}
+          onPress={onEdit}
+        >
+          <Icon
+            name="create-outline"
+            size={17}
+            color="#2563EB"
+          />
+        </Pressable>
+
+        <Pressable
+          style={[
+            styles.smallActionButton,
+            styles.deleteActionButton,
+          ]}
+          onPress={onDelete}
+        >
+          <Icon
+            name="trash-outline"
+            size={17}
+            color="#DC2626"
+          />
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+function getInitials(name) {
+  if (!name) return "?";
+
+  const parts = name.trim().split(" ");
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return (
+    parts[0][0] + parts[parts.length - 1][0]
+  ).toUpperCase();
+}
+
 /* ============================================================
    ABOUT
 ============================================================ */
@@ -737,19 +1038,303 @@ function AboutCard({ dark }) {
 }
 
 /* ============================================================
-   EDIT PROFILE MODAL
+   COMPLETE PROFILE MODAL
 ============================================================ */
 
-function EditProfileModal({
+function CompleteProfileModal({
   visible,
   dark,
+  profile,
+  onSave,
   onClose,
 }) {
-  const [name, setName] =
-    useState("Shashi Kumar");
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
+  const [phone, setPhone] = useState(profile.phone);
+  const [dob, setDob] = useState(profile.dob);
+  const [bloodGroup, setBloodGroup] = useState(
+    profile.bloodGroup
+  );
+  const [address, setAddress] = useState(
+    profile.address
+  );
 
-  const [email, setEmail] =
-    useState("codewithshashi00@gmail.com");
+  React.useEffect(() => {
+    if (visible) {
+      setName(profile.name);
+      setEmail(profile.email);
+      setPhone(profile.phone);
+      setDob(profile.dob);
+      setBloodGroup(profile.bloodGroup);
+      setAddress(profile.address);
+    }
+  }, [visible, profile]);
+
+  const save = () => {
+    if (!name.trim()) {
+      Alert.alert(
+        "Name required",
+        "Please enter your full name."
+      );
+      return;
+    }
+
+    if (!phone.trim()) {
+      Alert.alert(
+        "Phone required",
+        "Please enter your phone number."
+      );
+      return;
+    }
+
+    onSave({
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      dob: dob.trim(),
+      bloodGroup: bloodGroup.trim(),
+      address: address.trim(),
+    });
+
+    onClose();
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View
+          style={[
+            styles.largeEditSheet,
+            dark && styles.darkSurface,
+          ]}
+        >
+          <View style={styles.sheetHandle} />
+
+          <View style={styles.sheetHeader}>
+            <View>
+              <Text
+                style={[
+                  styles.sheetTitle,
+                  dark && styles.darkText,
+                ]}
+              >
+                Complete Profile
+              </Text>
+
+              <Text
+                style={[
+                  styles.sheetSubtitle,
+                  dark && styles.darkMutedText,
+                ]}
+              >
+                Keep your information updated
+              </Text>
+            </View>
+
+            <Pressable onPress={onClose}>
+              <Icon
+                name="close"
+                size={24}
+                color={
+                  dark ? "#F8FAFC" : "#0F172A"
+                }
+              />
+            </Pressable>
+          </View>
+
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <ProfileInput
+              dark={dark}
+              label="FULL NAME"
+              icon="person-outline"
+              value={name}
+              onChangeText={setName}
+              placeholder="Enter your full name"
+            />
+
+            <ProfileInput
+              dark={dark}
+              label="EMAIL"
+              icon="mail-outline"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter email address"
+              keyboardType="email-address"
+            />
+
+            <ProfileInput
+              dark={dark}
+              label="PHONE NUMBER"
+              icon="call-outline"
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="Enter phone number"
+              keyboardType="phone-pad"
+            />
+
+            <ProfileInput
+              dark={dark}
+              label="DATE OF BIRTH"
+              icon="calendar-outline"
+              value={dob}
+              onChangeText={setDob}
+              placeholder="DD/MM/YYYY"
+            />
+
+            <ProfileInput
+              dark={dark}
+              label="BLOOD GROUP"
+              icon="water-outline"
+              value={bloodGroup}
+              onChangeText={setBloodGroup}
+              placeholder="Example: O+"
+            />
+
+            <ProfileInput
+              dark={dark}
+              label="ADDRESS"
+              icon="location-outline"
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Enter your address"
+              multiline
+            />
+
+            <Pressable
+              style={styles.saveButton}
+              onPress={save}
+            >
+              <Icon
+                name="checkmark"
+                color="#FFFFFF"
+                size={20}
+              />
+
+              <Text style={styles.saveButtonText}>
+                Save Profile
+              </Text>
+            </Pressable>
+
+            <View style={{ height: 25 }} />
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+function ProfileInput({
+  dark,
+  label,
+  icon,
+  value,
+  onChangeText,
+  placeholder,
+  keyboardType,
+  multiline = false,
+}) {
+  return (
+    <View>
+      <Text
+        style={[
+          styles.inputLabel,
+          dark && styles.darkMutedText,
+        ]}
+      >
+        {label}
+      </Text>
+
+      <View
+        style={[
+          styles.inputBox,
+          multiline && styles.multilineInputBox,
+          dark && styles.darkInput,
+        ]}
+      >
+        <Icon
+          name={icon}
+          color="#64748B"
+          size={19}
+        />
+
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          keyboardType={keyboardType}
+          multiline={multiline}
+          textAlignVertical={
+            multiline ? "top" : "center"
+          }
+          style={[
+            styles.input,
+            multiline && styles.multilineInput,
+            dark && styles.darkText,
+          ]}
+          placeholder={placeholder}
+          placeholderTextColor="#94A3B8"
+        />
+      </View>
+    </View>
+  );
+}
+
+/* ============================================================
+   EMERGENCY CONTACT MODAL
+============================================================ */
+
+function EmergencyContactModal({
+  visible,
+  dark,
+  contact,
+  onSave,
+  onClose,
+}) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [relation, setRelation] = useState("");
+
+  React.useEffect(() => {
+    if (visible) {
+      setName(contact?.name || "");
+      setPhone(contact?.phone || "");
+      setRelation(contact?.relation || "");
+    }
+  }, [visible, contact]);
+
+  const save = () => {
+    if (!name.trim()) {
+      Alert.alert(
+        "Name required",
+        "Please enter emergency contact name."
+      );
+      return;
+    }
+
+    if (!phone.trim()) {
+      Alert.alert(
+        "Phone required",
+        "Please enter emergency contact number."
+      );
+      return;
+    }
+
+    onSave({
+      id: contact?.id || Date.now().toString(),
+      name: name.trim(),
+      phone: phone.trim(),
+      relation: relation.trim() || "Contact",
+    });
+
+    onClose();
+  };
 
   return (
     <Modal
@@ -768,100 +1353,71 @@ function EditProfileModal({
           <View style={styles.sheetHandle} />
 
           <View style={styles.sheetHeader}>
-            <Text
-              style={[
-                styles.sheetTitle,
-                dark && styles.darkText,
-              ]}
-            >
-              Edit Profile
-            </Text>
+            <View>
+              <Text
+                style={[
+                  styles.sheetTitle,
+                  dark && styles.darkText,
+                ]}
+              >
+                {contact
+                  ? "Edit Contact"
+                  : "Add Emergency Contact"}
+              </Text>
+
+              <Text
+                style={[
+                  styles.sheetSubtitle,
+                  dark && styles.darkMutedText,
+                ]}
+              >
+                This person can help during an
+                emergency.
+              </Text>
+            </View>
 
             <Pressable onPress={onClose}>
               <Icon
                 name="close"
-                color={dark ? "#F8FAFC" : "#0F172A"}
+                size={24}
+                color={
+                  dark ? "#F8FAFC" : "#0F172A"
+                }
               />
             </Pressable>
           </View>
 
-          <Text
-            style={[
-              styles.inputLabel,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            FULL NAME
-          </Text>
+          <ProfileInput
+            dark={dark}
+            label="CONTACT NAME"
+            icon="person-outline"
+            value={name}
+            onChangeText={setName}
+            placeholder="Example: Rahul Kumar"
+          />
 
-          <View
-            style={[
-              styles.inputBox,
-              dark && styles.darkInput,
-            ]}
-          >
-            <Icon
-              name="person-outline"
-              color="#64748B"
-              size={19}
-            />
+          <ProfileInput
+            dark={dark}
+            label="PHONE NUMBER"
+            icon="call-outline"
+            value={phone}
+            onChangeText={setPhone}
+            placeholder="Enter phone number"
+            keyboardType="phone-pad"
+          />
 
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              style={[
-                styles.input,
-                dark && styles.darkText,
-              ]}
-              placeholder="Your name"
-              placeholderTextColor="#94A3B8"
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.inputLabel,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            EMAIL
-          </Text>
-
-          <View
-            style={[
-              styles.inputBox,
-              dark && styles.darkInput,
-            ]}
-          >
-            <Icon
-              name="mail-outline"
-              color="#64748B"
-              size={19}
-            />
-
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              style={[
-                styles.input,
-                dark && styles.darkText,
-              ]}
-              placeholder="Email address"
-              placeholderTextColor="#94A3B8"
-            />
-          </View>
+          <ProfileInput
+            dark={dark}
+            label="RELATION"
+            icon="people-outline"
+            value={relation}
+            onChangeText={setRelation}
+            placeholder="Example: Brother, Father, Friend"
+          />
 
           <Pressable
             style={styles.saveButton}
-            onPress={() => {
-              onClose();
-
-              Alert.alert(
-                "Profile updated",
-                "Your profile information has been saved."
-              );
-            }}
+            onPress={save}
           >
             <Icon
               name="checkmark"
@@ -870,7 +1426,9 @@ function EditProfileModal({
             />
 
             <Text style={styles.saveButtonText}>
-              Save Changes
+              {contact
+                ? "Update Contact"
+                : "Save Contact"}
             </Text>
           </Pressable>
         </View>
@@ -884,14 +1442,21 @@ function EditProfileModal({
 ============================================================ */
 
 export default function ProfileScreen() {
+  const navigation = useNavigation();
   const systemTheme = useColorScheme();
 
   const [dark, setDark] = useState(
     systemTheme === "dark"
   );
 
-  const [editModal, setEditModal] =
+  const [completeProfileModal, setCompleteProfileModal] =
     useState(false);
+
+  const [contactModal, setContactModal] =
+    useState(false);
+
+  const [editingContact, setEditingContact] =
+    useState(null);
 
   const [vehicle, setVehicle] =
     useState("Car");
@@ -904,6 +1469,194 @@ export default function ProfileScreen() {
       traffic: false,
       co2: false,
     });
+
+  const [profile, setProfile] = useState({
+    name: "Shashi Kumar",
+    email: "codewithshashi009@gmail.com",
+    phone: "",
+    dob: "",
+    bloodGroup: "",
+    address: "",
+  });
+
+  const [emergencyContacts, setEmergencyContacts] =
+    useState([]);
+
+  /* ==========================================================
+     PROFILE COMPLETION
+  ========================================================== */
+
+  const profilePercentage = useMemo(() => {
+    const fields = [
+      profile.name,
+      profile.email,
+      profile.phone,
+      profile.dob,
+      profile.bloodGroup,
+      profile.address,
+    ];
+
+    const completed = fields.filter(
+      (item) => item && item.trim()
+    ).length;
+
+    return Math.round(
+      (completed / fields.length) * 100
+    );
+  }, [profile]);
+
+  /* ==========================================================
+     PROFILE SAVE
+  ========================================================== */
+
+  const handleSaveProfile = (updatedProfile) => {
+    setProfile(updatedProfile);
+
+    Alert.alert(
+      "Profile updated",
+      "Your profile information has been saved."
+    );
+  };
+
+  /* ==========================================================
+     EMERGENCY CONTACT
+  ========================================================== */
+
+  const openAddContact = () => {
+    if (emergencyContacts.length >= 4) {
+      Alert.alert(
+        "Maximum contacts reached",
+        "You can add maximum 4 emergency contacts."
+      );
+      return;
+    }
+
+    setEditingContact(null);
+    setContactModal(true);
+  };
+
+  const openEditContact = (contact) => {
+    setEditingContact(contact);
+    setContactModal(true);
+  };
+
+  const saveEmergencyContact = (contact) => {
+    setEmergencyContacts((previous) => {
+      const exists = previous.some(
+        (item) => item.id === contact.id
+      );
+
+      if (exists) {
+        return previous.map((item) =>
+          item.id === contact.id
+            ? contact
+            : item
+        );
+      }
+
+      return [...previous, contact];
+    });
+
+    Alert.alert(
+      "Contact saved",
+      "Emergency contact has been saved successfully."
+    );
+  };
+
+  const deleteEmergencyContact = (id) => {
+    Alert.alert(
+      "Remove contact",
+      "Are you sure you want to remove this emergency contact?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Remove",
+          style: "destructive",
+          onPress: () => {
+            setEmergencyContacts((previous) =>
+              previous.filter(
+                (item) => item.id !== id
+              )
+            );
+          },
+        },
+      ]
+    );
+  };
+
+  /* ==========================================================
+     LOGOUT
+  ========================================================== */
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Log out",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Log out",
+          style: "destructive",
+          onPress: () => {
+            /*
+             * Reset navigation stack so user cannot
+             * press back and return to Profile.
+             *
+             * IMPORTANT:
+             * "Login" must match your navigator's
+             * login screen name.
+             */
+
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: "login",
+                },
+              ],
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  /* ==========================================================
+     VEHICLE
+  ========================================================== */
+
+  const changeVehicle = () => {
+    const vehicles = [
+      "Car",
+      "Bike",
+      "Scooter",
+      "EV",
+      "Truck",
+      "Bicycle",
+      "Walking",
+    ];
+
+    const currentIndex =
+      vehicles.indexOf(vehicle);
+
+    const nextVehicle =
+      vehicles[
+        (currentIndex + 1) %
+          vehicles.length
+      ];
+
+    setVehicle(nextVehicle);
+  };
+
+  /* ==========================================================
+     COMING SOON
+  ========================================================== */
 
   const showComingSoon = (title) => {
     Alert.alert(
@@ -933,15 +1686,33 @@ export default function ProfileScreen() {
           styles.scrollContent
         }
       >
-        {/* PROFILE */}
+        {/* ====================================================
+            PROFILE
+        ==================================================== */}
+
         <ProfileCard
           dark={dark}
           onEdit={() =>
-            setEditModal(true)
+            setCompleteProfileModal(true)
           }
         />
 
-        {/* SMART PROFILE */}
+        {/* ====================================================
+            COMPLETE PROFILE
+        ==================================================== */}
+
+        <CompleteProfileCard
+          dark={dark}
+          percentage={profilePercentage}
+          onPress={() =>
+            setCompleteProfileModal(true)
+          }
+        />
+
+        {/* ====================================================
+            DRIVING PROFILE
+        ==================================================== */}
+
         <View style={styles.sectionHeading}>
           <Text
             style={[
@@ -965,38 +1736,55 @@ export default function ProfileScreen() {
         <VehicleProfileCard
           dark={dark}
           vehicle={vehicle}
-          onChange={() => {
-            const vehicles = [
-              "Car",
-              "Bike",
-              "Scooter",
-              "EV",
-              "Truck",
-              "Bicycle",
-              "Walking",
-            ];
-
-            const currentIndex =
-              vehicles.indexOf(vehicle);
-
-            const nextVehicle =
-              vehicles[
-                (currentIndex + 1) %
-                  vehicles.length
-              ];
-
-            setVehicle(nextVehicle);
-          }}
+          onChange={changeVehicle}
         />
 
-        {/* PREFERENCES */}
+        {/* ====================================================
+            SMART PREFERENCES
+        ==================================================== */}
+
         <SmartPreferences
           dark={dark}
           preferences={preferences}
           setPreferences={setPreferences}
         />
 
-        {/* SAVED PLACES */}
+        {/* ====================================================
+            EMERGENCY CONTACTS
+        ==================================================== */}
+
+        <View style={styles.sectionHeading}>
+          <Text
+            style={[
+              styles.headingTitle,
+              dark && styles.darkText,
+            ]}
+          >
+            Safety
+          </Text>
+
+          <Text
+            style={[
+              styles.headingSubtitle,
+              dark && styles.darkMutedText,
+            ]}
+          >
+            Keep trusted people ready for emergencies
+          </Text>
+        </View>
+
+        <EmergencyContacts
+          dark={dark}
+          contacts={emergencyContacts}
+          onAdd={openAddContact}
+          onEdit={openEditContact}
+          onDelete={deleteEmergencyContact}
+        />
+
+        {/* ====================================================
+            SAVED PLACES
+        ==================================================== */}
+
         <SavedPlaces
           dark={dark}
           onPress={() =>
@@ -1004,11 +1792,14 @@ export default function ProfileScreen() {
           }
         />
 
-        {/* ACCOUNT */}
+        {/* ====================================================
+            ACCOUNT
+        ==================================================== */}
+
         <AccountSection
           dark={dark}
           onEditProfile={() =>
-            setEditModal(true)
+            setCompleteProfileModal(true)
           }
           onNotifications={() =>
             showComingSoon("Notifications")
@@ -1020,61 +1811,22 @@ export default function ProfileScreen() {
           }
         />
 
-        {/* APPEARANCE */}
-        <View style={styles.sectionHeading}>
-          <Text
-            style={[
-              styles.headingTitle,
-              dark && styles.darkText,
-            ]}
-          >
-            Appearance
-          </Text>
+        {/* ====================================================
+            ABOUT
+        ==================================================== */}
 
-          <Text
-            style={[
-              styles.headingSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            Customize your app experience
-          </Text>
-        </View>
-
-
-        {/* ABOUT */}
         <AboutCard dark={dark} />
 
-        {/* LOGOUT */}
+        {/* ====================================================
+            LOGOUT
+        ==================================================== */}
+
         <Pressable
           style={[
             styles.logoutButton,
-            dark && {
-              backgroundColor: "#1F2937",
-              borderColor: "#7F1D1D",
-            },
+            dark && styles.darkLogoutButton,
           ]}
-          onPress={() =>
-            Alert.alert(
-              "Log out",
-              "Are you sure you want to log out?",
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-                {
-                  text: "Log out",
-                  style: "destructive",
-                  onPress: () =>
-                    Alert.alert(
-                      "Logged out",
-                      "You have been logged out."
-                    ),
-                },
-              ]
-            )
-          }
+          onPress={handleLogout}
         >
           <Icon
             name="log-out-outline"
@@ -1099,13 +1851,33 @@ export default function ProfileScreen() {
         <View style={{ height: 35 }} />
       </ScrollView>
 
-      {/* EDIT PROFILE */}
-      <EditProfileModal
-        visible={editModal}
+      {/* ======================================================
+          COMPLETE PROFILE MODAL
+      ====================================================== */}
+
+      <CompleteProfileModal
+        visible={completeProfileModal}
         dark={dark}
+        profile={profile}
+        onSave={handleSaveProfile}
         onClose={() =>
-          setEditModal(false)
+          setCompleteProfileModal(false)
         }
+      />
+
+      {/* ======================================================
+          EMERGENCY CONTACT MODAL
+      ====================================================== */}
+
+      <EmergencyContactModal
+        visible={contactModal}
+        dark={dark}
+        contact={editingContact}
+        onSave={saveEmergencyContact}
+        onClose={() => {
+          setContactModal(false);
+          setEditingContact(null);
+        }}
       />
     </SafeAreaView>
   );
@@ -1116,6 +1888,10 @@ export default function ProfileScreen() {
 ============================================================ */
 
 const styles = StyleSheet.create({
+  /* ==========================================================
+     GLOBAL
+  ========================================================== */
+
   container: {
     flex: 1,
     backgroundColor: "#F8FAFC",
@@ -1129,6 +1905,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#111827",
   },
 
+  darkInnerSurface: {
+    backgroundColor: "#1E293B",
+  },
+
   darkText: {
     color: "#F8FAFC",
   },
@@ -1137,48 +1917,14 @@ const styles = StyleSheet.create({
     color: "#94A3B8",
   },
 
-  header: {
-    height: 68,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth:
-      StyleSheet.hairlineWidth,
-    borderBottomColor: "#E2E8F0",
-  },
-
-  headerCenter: {
-    flex: 1,
-    alignItems: "center",
-  },
-
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    color: "#0F172A",
-  },
-
-  headerSubtitle: {
-    fontSize: 11,
-    marginTop: 2,
-    color: "#64748B",
-  },
-
-  iconButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
   scrollContent: {
     paddingTop: 12,
     paddingBottom: 20,
   },
 
-  /* PROFILE */
+  /* ==========================================================
+     PROFILE
+  ========================================================== */
 
   profileCard: {
     marginHorizontal: 14,
@@ -1312,7 +2058,97 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  /* HEADINGS */
+  /* ==========================================================
+     COMPLETE PROFILE
+  ========================================================== */
+
+  completeProfileCard: {
+    marginHorizontal: 14,
+    marginTop: 12,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 19,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: "#DBEAFE",
+  },
+
+  completeProfileTop: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  completeProfileIcon: {
+    width: 45,
+    height: 45,
+    borderRadius: 14,
+    backgroundColor: "#EFF6FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 11,
+  },
+
+  completeProfileContent: {
+    flex: 1,
+  },
+
+  completeProfileTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  completeProfileTitle: {
+    flex: 1,
+    color: "#0F172A",
+    fontSize: 13,
+    fontWeight: "900",
+  },
+
+  completeProfileSubtitle: {
+    color: "#64748B",
+    fontSize: 9,
+    marginTop: 4,
+    lineHeight: 13,
+  },
+
+  progressText: {
+    color: "#2563EB",
+    fontSize: 11,
+    fontWeight: "900",
+    marginLeft: 8,
+  },
+
+  progressTrack: {
+    height: 7,
+    backgroundColor: "#E2E8F0",
+    borderRadius: 10,
+    marginTop: 13,
+    overflow: "hidden",
+  },
+
+  progressFill: {
+    height: "100%",
+    backgroundColor: "#2563EB",
+    borderRadius: 10,
+  },
+
+  completeHint: {
+    color: "#2563EB",
+    fontSize: 8,
+    fontWeight: "700",
+    marginTop: 7,
+  },
+
+  completedHint: {
+    color: "#16A34A",
+    fontSize: 8,
+    fontWeight: "800",
+    marginTop: 7,
+  },
+
+  /* ==========================================================
+     HEADINGS
+  ========================================================== */
 
   sectionHeading: {
     paddingHorizontal: 16,
@@ -1332,7 +2168,9 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 
-  /* SECTION CARD */
+  /* ==========================================================
+     SECTION
+  ========================================================== */
 
   sectionCard: {
     backgroundColor: "#FFFFFF",
@@ -1370,7 +2208,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  /* VEHICLE */
+  /* ==========================================================
+     VEHICLE
+  ========================================================== */
 
   vehicleProfile: {
     flexDirection: "row",
@@ -1417,7 +2257,9 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
 
-  /* SMART PREFERENCES */
+  /* ==========================================================
+     SMART PREFERENCES
+  ========================================================== */
 
   switchRow: {
     minHeight: 66,
@@ -1455,7 +2297,167 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  /* SAVED PLACES */
+  /* ==========================================================
+     EMERGENCY CONTACTS
+  ========================================================== */
+
+  emergencyHeaderIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "#FEF2F2",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  emptyEmergency: {
+    backgroundColor: "#F8FAFC",
+    borderRadius: 15,
+    padding: 17,
+    alignItems: "center",
+  },
+
+  emptyEmergencyIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: "#EFF6FF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  emptyEmergencyTitle: {
+    color: "#0F172A",
+    fontSize: 12,
+    fontWeight: "900",
+    marginTop: 9,
+  },
+
+  emptyEmergencySubtitle: {
+    color: "#64748B",
+    fontSize: 9,
+    textAlign: "center",
+    lineHeight: 14,
+    marginTop: 4,
+  },
+
+  emergencyContactRow: {
+    minHeight: 76,
+    backgroundColor: "#F8FAFC",
+    borderRadius: 15,
+    padding: 10,
+    marginBottom: 8,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  emergencyAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: "#2563EB",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
+
+  emergencyAvatarText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "900",
+  },
+
+  emergencyContactInfo: {
+    flex: 1,
+  },
+
+  contactNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  emergencyContactName: {
+    color: "#0F172A",
+    fontSize: 11,
+    fontWeight: "900",
+    maxWidth: "60%",
+  },
+
+  relationBadge: {
+    backgroundColor: "#EFF6FF",
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 6,
+    marginLeft: 6,
+  },
+
+  relationText: {
+    color: "#2563EB",
+    fontSize: 7,
+    fontWeight: "900",
+  },
+
+  emergencyContactPhone: {
+    color: "#64748B",
+    fontSize: 9,
+    marginTop: 4,
+  },
+
+  contactNumber: {
+    color: "#94A3B8",
+    fontSize: 7,
+    marginTop: 3,
+  },
+
+  contactActions: {
+    flexDirection: "row",
+    marginLeft: 6,
+  },
+
+  smallActionButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    backgroundColor: "#EFF6FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 5,
+  },
+
+  deleteActionButton: {
+    backgroundColor: "#FEF2F2",
+  },
+
+  addEmergencyButton: {
+    height: 48,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#BFDBFE",
+    borderStyle: "dashed",
+    backgroundColor: "#F8FBFF",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    marginTop: 5,
+  },
+
+  addEmergencyText: {
+    color: "#2563EB",
+    fontSize: 11,
+    fontWeight: "900",
+    marginLeft: 6,
+  },
+
+  contactCount: {
+    color: "#64748B",
+    fontSize: 8,
+    textAlign: "center",
+    marginTop: 9,
+  },
+
+  /* ==========================================================
+     SAVED PLACES
+  ========================================================== */
 
   savedPlaceRow: {
     minHeight: 66,
@@ -1477,7 +2479,7 @@ const styles = StyleSheet.create({
 
   savedPlaceTitle: {
     fontSize: 12,
-    fontWeight: "850",
+    fontWeight: "800",
     color: "#0F172A",
   },
 
@@ -1487,7 +2489,9 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 
-  /* ACCOUNT */
+  /* ==========================================================
+     ACCOUNT
+  ========================================================== */
 
   accountList: {
     marginHorizontal: 14,
@@ -1519,7 +2523,7 @@ const styles = StyleSheet.create({
 
   preferenceTitle: {
     fontSize: 12,
-    fontWeight: "850",
+    fontWeight: "800",
     color: "#0F172A",
   },
 
@@ -1529,30 +2533,9 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 
-
-  appearanceIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 13,
-    backgroundColor: "#2563EB",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 11,
-  },
-
-  appearanceTitle: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "900",
-  },
-
-  appearanceSubtitle: {
-    color: "#BFDBFE",
-    fontSize: 9,
-    marginTop: 3,
-  },
-
-  /* ABOUT */
+  /* ==========================================================
+     ABOUT
+  ========================================================== */
 
   aboutCard: {
     marginHorizontal: 14,
@@ -1593,7 +2576,9 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
 
-  /* LOGOUT */
+  /* ==========================================================
+     LOGOUT
+  ========================================================== */
 
   logoutButton: {
     marginHorizontal: 14,
@@ -1606,6 +2591,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  darkLogoutButton: {
+    backgroundColor: "#1F2937",
+    borderColor: "#7F1D1D",
   },
 
   logoutText: {
@@ -1622,13 +2612,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 
-  /* MODAL */
+  /* ==========================================================
+     MODAL
+  ========================================================== */
 
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor:
-      "rgba(15,23,42,0.5)",
+    backgroundColor: "rgba(15,23,42,0.5)",
   },
 
   editSheet: {
@@ -1639,6 +2630,18 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom:
       Platform.OS === "ios" ? 28 : 18,
+    maxHeight: "88%",
+  },
+
+  largeEditSheet: {
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    paddingBottom:
+      Platform.OS === "ios" ? 28 : 18,
+    maxHeight: "92%",
   },
 
   sheetHandle: {
@@ -1663,6 +2666,12 @@ const styles = StyleSheet.create({
     color: "#0F172A",
   },
 
+  sheetSubtitle: {
+    color: "#64748B",
+    fontSize: 9,
+    marginTop: 3,
+  },
+
   inputLabel: {
     fontSize: 9,
     fontWeight: "900",
@@ -1673,12 +2682,18 @@ const styles = StyleSheet.create({
   },
 
   inputBox: {
-    height: 52,
+    minHeight: 52,
     borderRadius: 14,
     backgroundColor: "#F8FAFC",
     paddingHorizontal: 13,
     flexDirection: "row",
     alignItems: "center",
+  },
+
+  multilineInputBox: {
+    minHeight: 90,
+    alignItems: "flex-start",
+    paddingTop: 14,
   },
 
   darkInput: {
@@ -1691,6 +2706,10 @@ const styles = StyleSheet.create({
     marginLeft: 9,
     color: "#0F172A",
     fontSize: 13,
+  },
+
+  multilineInput: {
+    minHeight: 65,
   },
 
   saveButton: {

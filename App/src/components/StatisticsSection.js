@@ -1,22 +1,12 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 
 import StatCard from "./StatCard";
-const API_URL =
-  "http://10.132.14.63:5000/api/statistics";
-
+// const API_URL = "http://10.132.14.63:5000/api/statistics";
+const API_URL = "http://192.168.29.218:5000/api/statistics";
 /*
   Backend response:
 
@@ -53,9 +43,7 @@ const getChangeText = (change, text = "") => {
 
   const arrow = number >= 0 ? "↑" : "↓";
 
-  return `${arrow} ${Math.abs(number)} ${
-    text || ""
-  }`.trim();
+  return `${arrow} ${Math.abs(number)} ${text || ""}`.trim();
 };
 
 const getChangeColor = (change, type) => {
@@ -77,15 +65,11 @@ const getChangeColor = (change, type) => {
     type === "delayedShipments" ||
     type === "criticalCorridors"
   ) {
-    return number > 0
-      ? "#EF4444"
-      : "#16A085";
+    return number > 0 ? "#EF4444" : "#16A085";
   }
 
   if (type === "activeShipments") {
-    return number >= 0
-      ? "#16A085"
-      : "#F59E0B";
+    return number >= 0 ? "#16A085" : "#F59E0B";
   }
 
   return "#64748B";
@@ -109,9 +93,7 @@ export default function StatisticsSection({
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
-        throw new Error(
-          `API Error: ${response.status}`
-        );
+        throw new Error(`API Error: ${response.status}`);
       }
 
       const result = await response.json();
@@ -129,24 +111,15 @@ export default function StatisticsSection({
       */
 
       if (!result.success) {
-        throw new Error(
-          result.message ||
-            "Unable to load statistics"
-        );
+        throw new Error(result.message || "Unable to load statistics");
       }
 
       setStatistics(result.data || {});
       setUpdatedAt(result.updatedAt || null);
     } catch (err) {
-      console.error(
-        "Statistics API Error:",
-        err
-      );
+      console.error("Statistics API Error:", err);
 
-      setError(
-        err?.message ||
-          "Unable to load statistics"
-      );
+      setError(err?.message || "Unable to load statistics");
     } finally {
       setLoading(false);
     }
@@ -155,18 +128,12 @@ export default function StatisticsSection({
   useEffect(() => {
     fetchStatistics();
 
-    const interval = setInterval(
-      fetchStatistics,
-      refreshInterval
-    );
+    const interval = setInterval(fetchStatistics, refreshInterval);
 
     return () => {
       clearInterval(interval);
     };
-  }, [
-    fetchStatistics,
-    refreshInterval,
-  ]);
+  }, [fetchStatistics, refreshInterval]);
 
   /*
     ----------------------------
@@ -179,23 +146,14 @@ export default function StatisticsSection({
       <View style={styles.container}>
         <View style={styles.row}>
           {[0, 1, 2, 3].map((item) => (
-            <StatCard
-              key={item}
-              loading
-              index={item}
-            />
+            <StatCard key={item} loading index={item} />
           ))}
         </View>
 
         <View style={styles.statusRow}>
-          <ActivityIndicator
-            size="small"
-            color="#1769AA"
-          />
+          <ActivityIndicator size="small" color="#1769AA" />
 
-          <Text style={styles.statusText}>
-            Loading live statistics...
-          </Text>
+          <Text style={styles.statusText}>Loading live statistics...</Text>
         </View>
       </View>
     );
@@ -210,23 +168,15 @@ export default function StatisticsSection({
   if (error && !statistics) {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons
-          name="cloud-offline-outline"
-          size={21}
-          color="#64748B"
-        />
+        <Ionicons name="cloud-offline-outline" size={21} color="#64748B" />
 
-        <Text style={styles.errorTitle}>
-          Statistics unavailable
-        </Text>
+        <Text style={styles.errorTitle}>Statistics unavailable</Text>
 
         <Text style={styles.errorText}>
           Unable to fetch live dashboard data.
         </Text>
 
-        <Text style={styles.retryText}>
-          Check your backend connection.
-        </Text>
+        <Text style={styles.retryText}>Check your backend connection.</Text>
       </View>
     );
   }
@@ -237,22 +187,17 @@ export default function StatisticsSection({
     ----------------------------
   */
 
-  const predicted =
-    statistics?.predictedDisruptions || {};
+  const predicted = statistics?.predictedDisruptions || {};
 
-  const active =
-    statistics?.activeShipments || {};
+  const active = statistics?.activeShipments || {};
 
-  const delayed =
-    statistics?.delayedShipments || {};
+  const delayed = statistics?.delayedShipments || {};
 
-  const corridors =
-    statistics?.criticalCorridors || {};
+  const corridors = statistics?.criticalCorridors || {};
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-
         {/* Predicted Disruptions */}
 
         <StatCard
@@ -261,20 +206,10 @@ export default function StatisticsSection({
           iconBg="#FEE2E2"
           title="Predicted Disruptions"
           value={predicted.value ?? "--"}
-          bottom={getChangeText(
-            predicted.change,
-            predicted.period
-          )}
-          bottomColor={getChangeColor(
-            predicted.change,
-            "predictedDisruptions"
-          )}
+          bottom={getChangeText(predicted.change, predicted.period)}
+          bottomColor={getChangeColor(predicted.change, "predictedDisruptions")}
           index={0}
-          onPress={() =>
-            onCardPress?.(
-              "predictedDisruptions"
-            )
-          }
+          onPress={() => onCardPress?.("predictedDisruptions")}
         />
 
         {/* Active Shipments */}
@@ -285,20 +220,10 @@ export default function StatisticsSection({
           iconBg="#DBEAFE"
           title="Active Shipments"
           value={active.value ?? "--"}
-          bottom={getChangeText(
-            active.change,
-            active.label
-          )}
-          bottomColor={getChangeColor(
-            active.change,
-            "activeShipments"
-          )}
+          bottom={getChangeText(active.change, active.label)}
+          bottomColor={getChangeColor(active.change, "activeShipments")}
           index={1}
-          onPress={() =>
-            onCardPress?.(
-              "activeShipments"
-            )
-          }
+          onPress={() => onCardPress?.("activeShipments")}
         />
 
         {/* Delayed Shipments */}
@@ -309,20 +234,10 @@ export default function StatisticsSection({
           iconBg="#FEF3C7"
           title="Delayed Shipments"
           value={delayed.value ?? "--"}
-          bottom={getChangeText(
-            delayed.change,
-            delayed.period
-          )}
-          bottomColor={getChangeColor(
-            delayed.change,
-            "delayedShipments"
-          )}
+          bottom={getChangeText(delayed.change, delayed.period)}
+          bottomColor={getChangeColor(delayed.change, "delayedShipments")}
           index={2}
-          onPress={() =>
-            onCardPress?.(
-              "delayedShipments"
-            )
-          }
+          onPress={() => onCardPress?.("delayedShipments")}
         />
 
         {/* Critical Corridors */}
@@ -333,31 +248,16 @@ export default function StatisticsSection({
           iconBg="#DBEAFE"
           title="Critical Corridors"
           value={corridors.value ?? "--"}
-          bottom={getChangeText(
-            corridors.change,
-            corridors.label
-          )}
-          bottomColor={getChangeColor(
-            corridors.change,
-            "criticalCorridors"
-          )}
+          bottom={getChangeText(corridors.change, corridors.label)}
+          bottomColor={getChangeColor(corridors.change, "criticalCorridors")}
           index={3}
-          onPress={() =>
-            onCardPress?.(
-              "criticalCorridors"
-            )
-          }
+          onPress={() => onCardPress?.("criticalCorridors")}
         />
-
       </View>
 
       {error && statistics && (
         <View style={styles.warningRow}>
-          <Ionicons
-            name="warning-outline"
-            size={14}
-            color="#F59E0B"
-          />
+          <Ionicons name="warning-outline" size={14} color="#F59E0B" />
 
           <Text style={styles.warningText}>
             Latest data shown. Refresh failed.
@@ -371,9 +271,7 @@ export default function StatisticsSection({
 
           <Text style={styles.liveText}>
             {updatedAt
-              ? `Updated ${new Date(
-                  updatedAt
-                ).toLocaleTimeString([], {
+              ? `Updated ${new Date(updatedAt).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}`

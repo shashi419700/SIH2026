@@ -64,9 +64,10 @@ const ORIGIN = {
 };
 
 const DESTINATION = {
-  latitude: 23.3727,
-  longitude: 85.3372,
+  latitude: 25.5779,
+  longitude: 91.8837,
 };
+
 
 const ROUTE_COLORS = {
   recommended: "#2563EB",
@@ -77,219 +78,327 @@ const ROUTE_COLORS = {
 const MOCK_ROUTES = [
   {
     id: "route-main",
-    name: "Main Road",
+    name: "NH-6 Corridor",
     label: "Best Overall",
+
     coordinates: [
       ORIGIN,
-      { latitude: 23.3502, longitude: 85.3165 },
-      { latitude: 23.359, longitude: 85.323 },
-      { latitude: 23.366, longitude: 85.3305 },
+
+      { latitude: 26.1512, longitude: 91.7564 },
+      { latitude: 26.1258, longitude: 91.8125 },
+      { latitude: 25.9654, longitude: 91.8942 },
+      { latitude: 25.7801, longitude: 91.8765 },
+
       DESTINATION,
     ],
-    distanceKm: 18.4,
-    etaMin: 34,
+
+    distanceKm: 98.6,
+    etaMin: 168,
+
     traffic: {
       level: "moderate",
-      congestion: 42,
-      delayMin: 6,
-      speedKmh: 38,
-      incidents: 0,
-      closure: false,
-    },
-    road: {
-      quality: 88,
-      potholes: 1,
-      construction: 0,
-      closures: 0,
-      floodRisk: 12,
-      waterloggingRisk: 15,
-      narrowRoads: 0,
-      sharpTurns: 1,
-      steepSlopes: 0,
-      accidentProne: 8,
-      exposedSections: 1,
-    },
-    safety: 93,
-    toll: 0,
-    fuelLiters: 3.2,
-    fuelCost: 145,
-    co2Kg: 7.4,
-    rainExposure: 22,
-    chargingStations: 2,
-    hazards: [
-      {
-        id: "h1",
-        type: "waterlogging",
-        title: "Minor waterlogging",
-        description: "Possible water accumulation 1.4 km ahead.",
-        severity: SEVERITY.WARNING,
-        coordinate: {
-          latitude: 23.359,
-          longitude: 85.323,
-        },
-      },
-    ],
-  },
-  {
-    id: "route-highway",
-    name: "Ring Road",
-    label: "Fastest",
-    coordinates: [
-      ORIGIN,
-      { latitude: 23.348, longitude: 85.312 },
-      { latitude: 23.355, longitude: 85.322 },
-      { latitude: 23.363, longitude: 85.331 },
-      DESTINATION,
-    ],
-    distanceKm: 17.2,
-    etaMin: 28,
-    traffic: {
-      level: "heavy",
-      congestion: 71,
-      delayMin: 11,
-      speedKmh: 31,
+      congestion: 43,
+      delayMin: 9,
+      speedKmh: 36,
       incidents: 1,
       closure: false,
     },
+
     road: {
-      quality: 91,
-      potholes: 0,
+      quality: 87,
+      potholes: 2,
       construction: 1,
       closures: 0,
-      floodRisk: 32,
-      waterloggingRisk: 35,
-      narrowRoads: 0,
-      sharpTurns: 0,
-      steepSlopes: 1,
-      accidentProne: 25,
+      floodRisk: 24,
+      waterloggingRisk: 18,
+      narrowRoads: 1,
+      sharpTurns: 4,
+      steepSlopes: 2,
+      accidentProne: 14,
       exposedSections: 3,
     },
-    safety: 78,
-    toll: 80,
-    fuelLiters: 3.0,
-    fuelCost: 136,
-    co2Kg: 7.0,
-    rainExposure: 46,
-    chargingStations: 1,
+
+    safety: 91,
+
+    toll: 0,
+
+    fuelLiters: 17.8,
+    fuelCost: 1585,
+
+    co2Kg: 41.2,
+
+    rainExposure: 31,
+
+    chargingStations: 4,
+
     hazards: [
       {
-        id: "h2",
-        type: "accident",
-        title: "Accident reported",
-        description: "Traffic slowing near the interchange.",
-        severity: SEVERITY.DANGER,
-        coordinate: {
-          latitude: 23.355,
-          longitude: 85.322,
-        },
-      },
-      {
-        id: "h3",
-        type: "construction",
-        title: "Construction ahead",
-        description: "One lane is temporarily restricted.",
+        id: "ner-h1",
+        type: "waterlogging",
+
+        title: "Waterlogging risk",
+
+        description:
+          "Water accumulation may occur near low-lying sections during heavy rain.",
+
         severity: SEVERITY.WARNING,
+
         coordinate: {
-          latitude: 23.363,
-          longitude: 85.331,
+          latitude: 26.1258,
+          longitude: 91.8125,
         },
       },
     ],
   },
+
+  // ==================================================
+  // FASTEST ROUTE
+  // ==================================================
+
   {
-    id: "route-safe",
-    name: "Lake Avenue",
-    label: "Safest",
+    id: "route-highway",
+    name: "NH-27 Express Corridor",
+    label: "Fastest",
+
     coordinates: [
       ORIGIN,
-      { latitude: 23.337, longitude: 85.318 },
-      { latitude: 23.345, longitude: 85.327 },
-      { latitude: 23.359, longitude: 85.340 },
+
+      { latitude: 26.1388, longitude: 91.7485 },
+      { latitude: 26.1025, longitude: 91.7922 },
+      { latitude: 26.0342, longitude: 91.8415 },
+      { latitude: 25.8867, longitude: 91.9012 },
+
       DESTINATION,
     ],
-    distanceKm: 20.1,
-    etaMin: 37,
+
+    distanceKm: 94.2,
+    etaMin: 151,
+
+    traffic: {
+      level: "heavy",
+      congestion: 69,
+      delayMin: 18,
+      speedKmh: 39,
+      incidents: 2,
+      closure: false,
+    },
+
+    road: {
+      quality: 92,
+      potholes: 1,
+      construction: 2,
+      closures: 0,
+      floodRisk: 34,
+      waterloggingRisk: 29,
+      narrowRoads: 0,
+      sharpTurns: 2,
+      steepSlopes: 2,
+      accidentProne: 22,
+      exposedSections: 4,
+    },
+
+    safety: 82,
+
+    toll: 120,
+
+    fuelLiters: 17.1,
+    fuelCost: 1522,
+
+    co2Kg: 39.8,
+
+    rainExposure: 42,
+
+    chargingStations: 3,
+
+    hazards: [
+      {
+        id: "ner-h2",
+        type: "accident",
+
+        title: "Accident-prone section",
+
+        description:
+          "Traffic may slow down due to a reported accident-prone section.",
+
+        severity: SEVERITY.DANGER,
+
+        coordinate: {
+          latitude: 26.1025,
+          longitude: 91.7922,
+        },
+      },
+
+      {
+        id: "ner-h3",
+        type: "construction",
+
+        title: "Road construction",
+
+        description: "Temporary lane restriction due to highway construction.",
+
+        severity: SEVERITY.WARNING,
+
+        coordinate: {
+          latitude: 26.0342,
+          longitude: 91.8415,
+        },
+      },
+    ],
+  },
+
+  // ==================================================
+  // SAFEST ROUTE
+  // ==================================================
+
+  {
+    id: "route-safe",
+    name: "Hill Safety Corridor",
+    label: "Safest",
+
+    coordinates: [
+      ORIGIN,
+
+      { latitude: 26.1214, longitude: 91.7732 },
+      { latitude: 26.0628, longitude: 91.8351 },
+      { latitude: 25.9446, longitude: 91.8624 },
+      { latitude: 25.8042, longitude: 91.8918 },
+
+      DESTINATION,
+    ],
+
+    distanceKm: 103.8,
+    etaMin: 179,
+
     traffic: {
       level: "light",
-      congestion: 19,
-      delayMin: 2,
-      speedKmh: 43,
+      congestion: 18,
+      delayMin: 4,
+      speedKmh: 34,
       incidents: 0,
       closure: false,
     },
+
     road: {
       quality: 94,
       potholes: 0,
       construction: 0,
       closures: 0,
-      floodRisk: 8,
-      waterloggingRisk: 7,
-      narrowRoads: 0,
-      sharpTurns: 0,
-      steepSlopes: 0,
-      accidentProne: 4,
-      exposedSections: 0,
+      floodRisk: 9,
+      waterloggingRisk: 8,
+      narrowRoads: 1,
+      sharpTurns: 3,
+      steepSlopes: 3,
+      accidentProne: 5,
+      exposedSections: 1,
     },
+
     safety: 97,
+
     toll: 0,
-    fuelLiters: 3.5,
-    fuelCost: 158,
-    co2Kg: 7.9,
-    rainExposure: 12,
-    chargingStations: 3,
+
+    fuelLiters: 18.6,
+    fuelCost: 1655,
+
+    co2Kg: 43.1,
+
+    rainExposure: 16,
+
+    chargingStations: 5,
+
     hazards: [],
   },
+
+  // ==================================================
+  // LOW COST ROUTE
+  // ==================================================
+
   {
     id: "route-market",
-    name: "Market Road",
+    name: "Local Trade Corridor",
     label: "Low Cost",
+
     coordinates: [
       ORIGIN,
-      { latitude: 23.349, longitude: 85.304 },
-      { latitude: 23.361, longitude: 85.311 },
-      { latitude: 23.369, longitude: 85.323 },
+
+      { latitude: 26.1295, longitude: 91.7318 },
+      { latitude: 26.0752, longitude: 91.7826 },
+      { latitude: 25.9128, longitude: 91.8264 },
+      { latitude: 25.8421, longitude: 91.8669 },
+
       DESTINATION,
     ],
-    distanceKm: 18.9,
-    etaMin: 36,
+
+    distanceKm: 101.5,
+    etaMin: 188,
+
     traffic: {
       level: "moderate",
-      congestion: 48,
-      delayMin: 7,
-      speedKmh: 35,
-      incidents: 0,
+      congestion: 49,
+      delayMin: 13,
+      speedKmh: 32,
+      incidents: 1,
       closure: false,
     },
+
     road: {
-      quality: 74,
-      potholes: 5,
+      quality: 76,
+      potholes: 6,
       construction: 0,
       closures: 0,
-      floodRisk: 19,
-      waterloggingRisk: 22,
-      narrowRoads: 2,
-      sharpTurns: 2,
-      steepSlopes: 1,
-      accidentProne: 12,
-      exposedSections: 0,
+      floodRisk: 21,
+      waterloggingRisk: 27,
+      narrowRoads: 3,
+      sharpTurns: 5,
+      steepSlopes: 2,
+      accidentProne: 13,
+      exposedSections: 1,
     },
-    safety: 82,
+
+    safety: 83,
+
     toll: 0,
-    fuelLiters: 3.3,
-    fuelCost: 149,
-    co2Kg: 7.6,
-    rainExposure: 20,
-    chargingStations: 0,
+
+    fuelLiters: 18.2,
+    fuelCost: 1620,
+
+    co2Kg: 42.3,
+
+    rainExposure: 23,
+
+    chargingStations: 1,
+
     hazards: [
       {
-        id: "h4",
+        id: "ner-h4",
         type: "pothole",
+
         title: "Poor road surface",
-        description: "Several potholes reported on this section.",
+
+        description:
+          "Multiple potholes reported along the local trade corridor.",
+
         severity: SEVERITY.WARNING,
+
         coordinate: {
-          latitude: 23.361,
-          longitude: 85.311,
+          latitude: 26.0752,
+          longitude: 91.7826,
+        },
+      },
+
+      {
+        id: "ner-h5",
+        type: "waterlogging",
+
+        title: "Heavy rain risk",
+
+        description:
+          "Low-lying road section may experience waterlogging during heavy rainfall.",
+
+        severity: SEVERITY.WARNING,
+
+        coordinate: {
+          latitude: 25.9128,
+          longitude: 91.8264,
         },
       },
     ],
@@ -400,8 +509,7 @@ const FuelService = {
   },
 };
 
-const wait = (ms) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /* ============================================================
    SCORING ENGINE
@@ -433,11 +541,7 @@ function trafficScore(traffic) {
   const closurePenalty = traffic.closure ? 100 : 0;
 
   return clamp(
-    100 -
-      congestionPenalty -
-      delayPenalty -
-      incidentPenalty -
-      closurePenalty
+    100 - congestionPenalty - delayPenalty - incidentPenalty - closurePenalty,
   );
 }
 
@@ -474,10 +578,7 @@ function roadScore(road, vehicle) {
   score -= road.steepSlopes * 3;
   score -= road.accidentProne * 0.15;
 
-  if (
-    vehicle === VEHICLES.BIKE ||
-    vehicle === VEHICLES.SCOOTER
-  ) {
+  if (vehicle === VEHICLES.BIKE || vehicle === VEHICLES.SCOOTER) {
     score -= road.floodRisk * 0.25;
     score -= road.exposedSections * 4;
   }
@@ -493,10 +594,7 @@ function roadScore(road, vehicle) {
 function vehicleAdjustment(route, vehicle) {
   let adjustment = 0;
 
-  if (
-    vehicle === VEHICLES.BIKE ||
-    vehicle === VEHICLES.SCOOTER
-  ) {
+  if (vehicle === VEHICLES.BIKE || vehicle === VEHICLES.SCOOTER) {
     if (route.road.floodRisk > 20) adjustment -= 8;
     if (route.road.exposedSections > 1) adjustment -= 5;
   }
@@ -523,13 +621,7 @@ function vehicleAdjustment(route, vehicle) {
   return adjustment;
 }
 
-function calculateRouteScore(
-  route,
-  weather,
-  allRoutes,
-  preferences,
-  vehicle
-) {
+function calculateRouteScore(route, weather, allRoutes, preferences, vehicle) {
   const weights = {
     ...DEFAULT_WEIGHTS,
   };
@@ -576,25 +668,20 @@ function calculateRouteScore(
     finalWeights.cost += 5;
   }
 
-  const weightSum = Object.values(finalWeights).reduce(
-    (a, b) => a + b,
-    0
-  );
+  const weightSum = Object.values(finalWeights).reduce((a, b) => a + b, 0);
 
   finalWeights = Object.fromEntries(
     Object.entries(finalWeights).map(([key, value]) => [
       key,
       Math.max(0, value) / weightSum,
-    ])
+    ]),
   );
 
   const distances = allRoutes.map((r) => r.distanceKm);
   const etas = allRoutes.map((r) => r.etaMin);
   const costs = allRoutes.map((r) => r.toll + r.fuelCost);
 
-  const safety = clamp(
-    route.safety + vehicleAdjustment(route, vehicle)
-  );
+  const safety = clamp(route.safety + vehicleAdjustment(route, vehicle));
 
   const traffic = trafficScore(route.traffic);
   const weatherScore = weatherRiskScore(weather, route);
@@ -602,17 +689,17 @@ function calculateRouteScore(
   const eta = normalizeInverse(
     route.etaMin,
     Math.min(...etas),
-    Math.max(...etas)
+    Math.max(...etas),
   );
   const distance = normalizeInverse(
     route.distanceKm,
     Math.min(...distances),
-    Math.max(...distances)
+    Math.max(...distances),
   );
   const cost = normalizeInverse(
     route.toll + route.fuelCost,
     Math.min(...costs),
-    Math.max(...costs)
+    Math.max(...costs),
   );
 
   let totalScore =
@@ -747,68 +834,37 @@ const Icon = memo(function Icon({
   library = "ion",
 }) {
   if (library === "material") {
-    return (
-      <MaterialCommunityIcons
-        name={name}
-        size={size}
-        color={color}
-      />
-    );
+    return <MaterialCommunityIcons name={name} size={size} color={color} />;
   }
 
-  return (
-    <Ionicons
-      name={name}
-      size={size}
-      color={color}
-    />
-  );
+  return <Ionicons name={name} size={size} color={color} />;
 });
 
 /* ============================================================
    HEADER
 ============================================================ */
 
-const RouteHeader = memo(function RouteHeader({
-  dark,
-  vehicle,
-  onSettings,
-}) {
+const RouteHeader = memo(function RouteHeader({ dark, vehicle, onSettings }) {
   return (
     <View style={[styles.header, dark && styles.darkSurface]}>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Go back"
         style={styles.iconButton}
-        onPress={() =>
-          Alert.alert("Smart Route", "Back pressed")
-        }
+        onPress={() => Alert.alert("Smart Route", "Back pressed")}
       >
-        <Icon
-          name="arrow-back"
-          color={dark ? "#F8FAFC" : "#0F172A"}
-        />
+        <Icon name="arrow-back" color={dark ? "#F8FAFC" : "#0F172A"} />
       </Pressable>
 
       <View style={styles.headerCenter}>
         <View style={styles.titleRow}>
           <View style={styles.liveDot} />
-          <Text
-            style={[
-              styles.headerTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.headerTitle, dark && styles.darkText]}>
             Smart Route
           </Text>
         </View>
 
-        <Text
-          style={[
-            styles.headerSubtitle,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.headerSubtitle, dark && styles.darkMutedText]}>
           Live route intelligence
         </Text>
       </View>
@@ -819,10 +875,7 @@ const RouteHeader = memo(function RouteHeader({
         style={styles.iconButton}
         onPress={onSettings}
       >
-        <Icon
-          name="settings-outline"
-          color={dark ? "#F8FAFC" : "#0F172A"}
-        />
+        <Icon name="settings-outline" color={dark ? "#F8FAFC" : "#0F172A"} />
       </Pressable>
     </View>
   );
@@ -840,31 +893,16 @@ const LocationSelector = memo(function LocationSelector({
 }) {
   return (
     <View style={styles.locationWrapper}>
-      <View
-        style={[
-          styles.locationCard,
-          dark && styles.darkSurface,
-        ]}
-      >
+      <View style={[styles.locationCard, dark && styles.darkSurface]}>
         <View style={styles.locationLine}>
           <View style={styles.originDot} />
 
           <View style={styles.locationText}>
-            <Text
-              style={[
-                styles.smallLabel,
-                dark && styles.darkMutedText,
-              ]}
-            >
+            <Text style={[styles.smallLabel, dark && styles.darkMutedText]}>
               FROM
             </Text>
 
-            <Text
-              style={[
-                styles.locationValue,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.locationValue, dark && styles.darkText]}>
               Current Location
             </Text>
           </View>
@@ -878,11 +916,7 @@ const LocationSelector = memo(function LocationSelector({
         />
 
         <View style={styles.locationLine}>
-          <Icon
-            name="location"
-            size={20}
-            color="#DC2626"
-          />
+          <Icon name="location" size={20} color="#DC2626" />
 
           <Pressable
             accessibilityRole="button"
@@ -890,12 +924,7 @@ const LocationSelector = memo(function LocationSelector({
             style={styles.locationText}
             onPress={onDestination}
           >
-            <Text
-              style={[
-                styles.smallLabel,
-                dark && styles.darkMutedText,
-              ]}
-            >
+            <Text style={[styles.smallLabel, dark && styles.darkMutedText]}>
               TO
             </Text>
 
@@ -917,11 +946,7 @@ const LocationSelector = memo(function LocationSelector({
           style={styles.swapButton}
           onPress={onSwap}
         >
-          <Icon
-            name="swap-vertical"
-            size={20}
-            color="#2563EB"
-          />
+          <Icon name="swap-vertical" size={20} color="#2563EB" />
         </Pressable>
       </View>
     </View>
@@ -932,53 +957,66 @@ const LocationSelector = memo(function LocationSelector({
    SEARCH MODAL
 ============================================================ */
 
-function DestinationSearch({
-  visible,
-  dark,
-  onClose,
-  onSelect,
-}) {
+function DestinationSearch({ visible, dark, onClose, onSelect }) {
   const [query, setQuery] = useState("");
+  const DESTINATIONS = [
+    {
+      name: "Guwahati Railway Station",
+      location: "Guwahati, Assam",
+    },
+    {
+      name: "Lokpriya Gopinath Bordoloi International Airport",
+      location: "Guwahati, Assam",
+    },
+    {
+      name: "Shillong Police Bazar",
+      location: "Shillong, Meghalaya",
+    },
+    {
+      name: "Imphal City Centre",
+      location: "Imphal, Manipur",
+    },
+    {
+      name: "Aizawl City Centre",
+      location: "Aizawl, Mizoram",
+    },
+    {
+      name: "Agartala Railway Station",
+      location: "Agartala, Tripura",
+    },
+    {
+      name: "Gangtok MG Marg",
+      location: "Gangtok, Sikkim",
+    },
+    {
+      name: "Itanagar City Centre",
+      location: "Itanagar, Arunachal Pradesh",
+    },
+    {
+      name: "Kohima City Centre",
+      location: "Kohima, Nagaland",
+    },
+    {
+      name: "Dibrugarh Railway Station",
+      location: "Dibrugarh, Assam",
+    },
+  ];
 
-  const results = [
-    "Ranchi Railway Station",
-    "Birsa Munda Airport",
-    "Morabadi Ground",
-    "Harmu Road",
-    "Main Road",
-  ].filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase())
+  const results = DESTINATIONS.filter((item) =>
+    `${item.name} ${item.location}`.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <SafeAreaView
-        style={[
-          styles.modalContainer,
-          dark && styles.darkBackground,
-        ]}
+        style={[styles.modalContainer, dark && styles.darkBackground]}
       >
         <View style={styles.searchHeader}>
-          <Pressable
-            style={styles.iconButton}
-            onPress={onClose}
-          >
-            <Icon
-              name="close"
-              color={dark ? "#F8FAFC" : "#0F172A"}
-            />
+          <Pressable style={styles.iconButton} onPress={onClose}>
+            <Icon name="close" color={dark ? "#F8FAFC" : "#0F172A"} />
           </Pressable>
 
-          <Text
-            style={[
-              styles.modalTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.modalTitle, dark && styles.darkText]}>
             Choose destination
           </Text>
         </View>
@@ -991,115 +1029,72 @@ function DestinationSearch({
             },
           ]}
         >
-          <Icon
-            name="search"
-            color={dark ? "#94A3B8" : "#64748B"}
-          />
+          <Icon name="search" color={dark ? "#94A3B8" : "#64748B"} />
 
           <TextInput
             autoFocus
             value={query}
             onChangeText={setQuery}
             placeholder="Search destination"
-            placeholderTextColor={
-              dark ? "#64748B" : "#94A3B8"
-            }
-            style={[
-              styles.searchInput,
-              dark && styles.darkText,
-            ]}
+            placeholderTextColor={dark ? "#64748B" : "#94A3B8"}
+            style={[styles.searchInput, dark && styles.darkText]}
             accessibilityLabel="Destination search"
           />
         </View>
 
-        <Text
-          style={[
-            styles.sectionLabel,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.sectionLabel, dark && styles.darkMutedText]}>
           QUICK DESTINATIONS
         </Text>
 
         <View style={styles.savedRow}>
-          {["Home", "Work", "Favorites"].map(
-            (item, index) => (
-              <Pressable
-                key={item}
-                style={[
-                  styles.savedPlace,
-                  dark && styles.darkSurface,
-                ]}
-                onPress={() => onSelect(item)}
-              >
-                <Icon
-                  name={
-                    index === 0
-                      ? "home"
-                      : index === 1
-                      ? "briefcase"
-                      : "heart"
-                  }
-                  color="#2563EB"
-                />
-                <Text
-                  style={[
-                    styles.savedText,
-                    dark && styles.darkText,
-                  ]}
-                >
-                  {item}
-                </Text>
-              </Pressable>
-            )
-          )}
+          {["Home", "Work", "Favorites"].map((item, index) => (
+            <Pressable
+              key={item}
+              style={[styles.savedPlace, dark && styles.darkSurface]}
+              onPress={() => onSelect(item)}
+            >
+              <Icon
+                name={
+                  index === 0 ? "home" : index === 1 ? "briefcase" : "heart"
+                }
+                color="#2563EB"
+              />
+              <Text style={[styles.savedText, dark && styles.darkText]}>
+                {item}
+              </Text>
+            </Pressable>
+          ))}
         </View>
 
-        <Text
-          style={[
-            styles.sectionLabel,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.sectionLabel, dark && styles.darkMutedText]}>
           SEARCH RESULTS
         </Text>
 
         <ScrollView>
           {results.map((item) => (
             <Pressable
-              key={item}
+              key={item.name}
               style={[
                 styles.searchResult,
                 dark && {
                   borderBottomColor: "#334155",
                 },
               ]}
-              onPress={() => onSelect(item)}
+              onPress={() => onSelect(item.name)}
             >
               <View style={styles.resultIcon}>
-                <Icon
-                  name="location-outline"
-                  color="#2563EB"
-                />
+                <Icon name="location-outline" color="#2563EB" />
               </View>
 
               <View>
-                <Text
-                  style={[
-                    styles.resultTitle,
-                    dark && styles.darkText,
-                  ]}
-                >
-                  {item}
+                <Text style={[styles.resultTitle, dark && styles.darkText]}>
+                  {item.name}
                 </Text>
 
                 <Text
-                  style={[
-                    styles.resultSubtitle,
-                    dark && styles.darkMutedText,
-                  ]}
+                  style={[styles.resultSubtitle, dark && styles.darkMutedText]}
                 >
-                  Ranchi, Jharkhand
+                  {item.location}
                 </Text>
               </View>
             </Pressable>
@@ -1125,9 +1120,7 @@ const RouteMap = memo(function RouteMap({
   useEffect(() => {
     if (!mapRef.current || !routes.length) return;
 
-    const allCoordinates = routes.flatMap(
-      (route) => route.coordinates
-    );
+    const allCoordinates = routes.flatMap((route) => route.coordinates);
 
     mapRef.current.fitToCoordinates(allCoordinates, {
       edgePadding: {
@@ -1169,12 +1162,10 @@ const RouteMap = memo(function RouteMap({
                 selected
                   ? ROUTE_COLORS.recommended
                   : route.road.floodRisk > 30
-                  ? ROUTE_COLORS.risky
-                  : ROUTE_COLORS.alternative
+                    ? ROUTE_COLORS.risky
+                    : ROUTE_COLORS.alternative
               }
-              lineDashPattern={
-                selected ? undefined : [8, 7]
-              }
+              lineDashPattern={selected ? undefined : [8, 7]}
               tappable
               onPress={() => onSelectRoute(route)}
             />
@@ -1187,11 +1178,7 @@ const RouteMap = memo(function RouteMap({
           description="Selected destination"
         >
           <View style={styles.destinationMarker}>
-            <Icon
-              name="location"
-              size={22}
-              color="#FFFFFF"
-            />
+            <Icon name="location" size={22} color="#FFFFFF" />
           </View>
         </Marker>
 
@@ -1231,17 +1218,8 @@ const RouteMap = memo(function RouteMap({
           title="Waterlogging"
           description="Possible water accumulation"
         >
-          <View
-            style={[
-              styles.hazardMarker,
-              { backgroundColor: "#F59E0B" },
-            ]}
-          >
-            <Icon
-              name="water"
-              size={16}
-              color="#FFFFFF"
-            />
+          <View style={[styles.hazardMarker, { backgroundColor: "#F59E0B" }]}>
+            <Icon name="water" size={16} color="#FFFFFF" />
           </View>
         </Marker>
 
@@ -1253,39 +1231,20 @@ const RouteMap = memo(function RouteMap({
           title="Construction"
           description="Lane restriction"
         >
-          <View
-            style={[
-              styles.hazardMarker,
-              { backgroundColor: "#EA580C" },
-            ]}
-          >
-            <Icon
-              name="construct"
-              size={16}
-              color="#FFFFFF"
-            />
+          <View style={[styles.hazardMarker, { backgroundColor: "#EA580C" }]}>
+            <Icon name="construct" size={16} color="#FFFFFF" />
           </View>
         </Marker>
       </MapView>
 
       <View style={styles.mapLegend}>
         <View style={styles.legendItem}>
-          <View
-            style={[
-              styles.legendLine,
-              { backgroundColor: "#2563EB" },
-            ]}
-          />
+          <View style={[styles.legendLine, { backgroundColor: "#2563EB" }]} />
           <Text style={styles.legendText}>Recommended</Text>
         </View>
 
         <View style={styles.legendItem}>
-          <View
-            style={[
-              styles.legendLine,
-              { backgroundColor: "#64748B" },
-            ]}
-          />
+          <View style={[styles.legendLine, { backgroundColor: "#64748B" }]} />
           <Text style={styles.legendText}>Alternative</Text>
         </View>
       </View>
@@ -1297,10 +1256,7 @@ const RouteMap = memo(function RouteMap({
    SCORE
 ============================================================ */
 
-const RouteScore = memo(function RouteScore({
-  score,
-  compact = false,
-}) {
+const RouteScore = memo(function RouteScore({ score, compact = false }) {
   const color = scoreColor(score);
 
   return (
@@ -1327,18 +1283,10 @@ const RouteScore = memo(function RouteScore({
           {score}
         </Text>
 
-        {!compact && (
-          <Text style={styles.scoreOutOf}>
-            /100
-          </Text>
-        )}
+        {!compact && <Text style={styles.scoreOutOf}>/100</Text>}
       </View>
 
-      {!compact && (
-        <Text style={styles.scoreLabel}>
-          SMART SCORE
-        </Text>
-      )}
+      {!compact && <Text style={styles.scoreLabel}>SMART SCORE</Text>}
     </View>
   );
 });
@@ -1359,40 +1307,22 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
   return (
     <Pressable
       onPress={onPress}
-      style={[
-        styles.recommendedCard,
-        dark && styles.darkCard,
-      ]}
+      style={[styles.recommendedCard, dark && styles.darkCard]}
       accessibilityRole="button"
       accessibilityLabel={`Recommended route ${route.name}, score ${score.totalScore}`}
     >
       <LinearGradient
-        colors={
-          dark
-            ? ["#172554", "#0F172A"]
-            : ["#EFF6FF", "#FFFFFF"]
-        }
+        colors={dark ? ["#172554", "#0F172A"] : ["#EFF6FF", "#FFFFFF"]}
         style={styles.recommendedGradient}
       >
         <View style={styles.cardTopRow}>
           <View>
             <View style={styles.badge}>
-              <Icon
-                name="sparkles"
-                size={13}
-                color="#FFFFFF"
-              />
-              <Text style={styles.badgeText}>
-                BEST OVERALL
-              </Text>
+              <Icon name="sparkles" size={13} color="#FFFFFF" />
+              <Text style={styles.badgeText}>BEST OVERALL</Text>
             </View>
 
-            <Text
-              style={[
-                styles.routeName,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.routeName, dark && styles.darkText]}>
               Route via {route.name}
             </Text>
           </View>
@@ -1402,21 +1332,11 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
 
         <View style={styles.routeMainStats}>
           <View>
-            <Text
-              style={[
-                styles.distance,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.distance, dark && styles.darkText]}>
               {route.distanceKm} km
             </Text>
 
-            <Text
-              style={[
-                styles.eta,
-                dark && styles.darkMutedText,
-              ]}
-            >
+            <Text style={[styles.eta, dark && styles.darkMutedText]}>
               ETA: {route.etaMin} min
             </Text>
           </View>
@@ -1426,9 +1346,7 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
               style={[
                 styles.statusDot,
                 {
-                  backgroundColor: trafficColor(
-                    route.traffic.level
-                  ),
+                  backgroundColor: trafficColor(route.traffic.level),
                 },
               ]}
             />
@@ -1448,18 +1366,14 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
           <Metric
             icon="rainy"
             label={
-              score.weatherScore >= 75
-                ? "Weather Low Risk"
-                : "Weather Risk"
+              score.weatherScore >= 75 ? "Weather Low Risk" : "Weather Risk"
             }
             color={scoreColor(score.weatherScore)}
           />
 
           <Metric
             icon="car"
-            label={`Traffic ${capitalize(
-              route.traffic.level
-            )}`}
+            label={`Traffic ${capitalize(route.traffic.level)}`}
             color={trafficColor(route.traffic.level)}
           />
         </View>
@@ -1468,58 +1382,27 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
           {vehicle !== VEHICLES.EV &&
             vehicle !== VEHICLES.BICYCLE &&
             vehicle !== VEHICLES.WALKING && (
-              <CostItem
-                label="Fuel"
-                value={`₹${fuel.cost}`}
-              />
+              <CostItem label="Fuel" value={`₹${fuel.cost}`} />
             )}
 
           {vehicle === VEHICLES.EV && (
-            <CostItem
-              label="Battery"
-              value={`${fuel.batteryPercent}%`}
-            />
+            <CostItem label="Battery" value={`${fuel.batteryPercent}%`} />
           )}
 
-          <CostItem
-            label="Toll"
-            value={`₹${route.toll}`}
-          />
+          <CostItem label="Toll" value={`₹${route.toll}`} />
 
-          <CostItem
-            label="CO₂"
-            value={`${route.co2Kg} kg`}
-          />
+          <CostItem label="CO₂" value={`${route.co2Kg} kg`} />
         </View>
 
-        <View
-          style={[
-            styles.whyBox,
-            dark && { backgroundColor: "#1E3A8A" },
-          ]}
-        >
-          <Icon
-            name="bulb-outline"
-            size={18}
-            color="#2563EB"
-          />
+        <View style={[styles.whyBox, dark && { backgroundColor: "#1E3A8A" }]}>
+          <Icon name="bulb-outline" size={18} color="#2563EB" />
 
           <View style={{ flex: 1 }}>
-            <Text
-              style={[
-                styles.whyTitle,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.whyTitle, dark && styles.darkText]}>
               Why recommended
             </Text>
 
-            <Text
-              style={[
-                styles.whyText,
-                dark && styles.darkMutedText,
-              ]}
-            >
+            <Text style={[styles.whyText, dark && styles.darkMutedText]}>
               {score.reasons.slice(0, 2).join(". ")}.
             </Text>
           </View>
@@ -1536,19 +1419,8 @@ const RecommendedRouteCard = memo(function RecommendedRouteCard({
 function Metric({ icon, label, color }) {
   return (
     <View style={styles.metric}>
-      <Icon
-        name={icon}
-        size={16}
-        color={color}
-      />
-      <Text
-        style={[
-          styles.metricText,
-          { color },
-        ]}
-      >
-        {label}
-      </Text>
+      <Icon name={icon} size={16} color={color} />
+      <Text style={[styles.metricText, { color }]}>{label}</Text>
     </View>
   );
 }
@@ -1585,34 +1457,19 @@ const AlternativeRouteCard = memo(function AlternativeRouteCard({
       <View style={styles.altHeader}>
         <View style={{ flex: 1 }}>
           <View style={styles.altLabel}>
-            <Text style={styles.altLabelText}>
-              {route.label.toUpperCase()}
-            </Text>
+            <Text style={styles.altLabelText}>{route.label.toUpperCase()}</Text>
           </View>
 
-          <Text
-            style={[
-              styles.altRouteName,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.altRouteName, dark && styles.darkText]}>
             {route.name}
           </Text>
 
-          <Text
-            style={[
-              styles.altStats,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.altStats, dark && styles.darkMutedText]}>
             {route.distanceKm} km · {route.etaMin} min
           </Text>
         </View>
 
-        <RouteScore
-          score={score.totalScore}
-          compact
-        />
+        <RouteScore score={score.totalScore} compact />
       </View>
 
       <View style={styles.altMetrics}>
@@ -1631,20 +1488,11 @@ const AlternativeRouteCard = memo(function AlternativeRouteCard({
         <Metric
           icon="cash-outline"
           label={`₹${route.toll} toll`}
-          color={
-            route.toll === 0
-              ? "#16A34A"
-              : "#64748B"
-          }
+          color={route.toll === 0 ? "#16A34A" : "#64748B"}
         />
       </View>
 
-      <Text
-        style={[
-          styles.altReason,
-          dark && styles.darkMutedText,
-        ]}
-      >
+      <Text style={[styles.altReason, dark && styles.darkMutedText]}>
         {getAlternativeReason(route, score)}
       </Text>
     </Pressable>
@@ -1671,54 +1519,29 @@ function getAlternativeReason(route, score) {
    WEATHER SUMMARY
 ============================================================ */
 
-const WeatherSummary = memo(function WeatherSummary({
-  weather,
-  dark,
-}) {
+const WeatherSummary = memo(function WeatherSummary({ weather, dark }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
         <View style={styles.sectionTitleRow}>
           <View style={styles.sectionIcon}>
-            <Icon
-              name="cloud"
-              size={18}
-              color="#2563EB"
-            />
+            <Icon name="cloud" size={18} color="#2563EB" />
           </View>
 
           <View>
-            <Text
-              style={[
-                styles.sectionTitle,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.sectionTitle, dark && styles.darkText]}>
               Weather Intelligence
             </Text>
 
             <Text
-              style={[
-                styles.sectionSubtitle,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.sectionSubtitle, dark && styles.darkMutedText]}
             >
               Live conditions along your route
             </Text>
           </View>
         </View>
 
-        <Text
-          style={[
-            styles.temperature,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.temperature, dark && styles.darkText]}>
           {weather.temperature}°
         </Text>
       </View>
@@ -1760,19 +1583,14 @@ const WeatherSummary = memo(function WeatherSummary({
         <Icon
           name="warning"
           size={20}
-          color={
-            weather.extremeWeather
-              ? "#FFFFFF"
-              : "#B45309"
-          }
+          color={weather.extremeWeather ? "#FFFFFF" : "#B45309"}
         />
 
         <View style={{ flex: 1 }}>
           <Text
             style={[
               styles.warningTitle,
-              weather.extremeWeather &&
-                styles.whiteText,
+              weather.extremeWeather && styles.whiteText,
             ]}
           >
             {weather.extremeWeather
@@ -1783,8 +1601,7 @@ const WeatherSummary = memo(function WeatherSummary({
           <Text
             style={[
               styles.warningText,
-              weather.extremeWeather &&
-                styles.whiteText,
+              weather.extremeWeather && styles.whiteText,
             ]}
           >
             {weather.extremeWeather
@@ -1800,17 +1617,9 @@ const WeatherSummary = memo(function WeatherSummary({
 function WeatherStat({ icon, label, value }) {
   return (
     <View style={styles.weatherStat}>
-      <Icon
-        name={icon}
-        size={18}
-        color="#2563EB"
-      />
-      <Text style={styles.weatherStatValue}>
-        {value}
-      </Text>
-      <Text style={styles.weatherStatLabel}>
-        {label}
-      </Text>
+      <Icon name={icon} size={18} color="#2563EB" />
+      <Text style={styles.weatherStatValue}>{value}</Text>
+      <Text style={styles.weatherStatLabel}>{label}</Text>
     </View>
   );
 }
@@ -1819,37 +1628,18 @@ function WeatherStat({ icon, label, value }) {
    WEATHER ALONG ROUTE
 ============================================================ */
 
-const WeatherAlongRoute = memo(function WeatherAlongRoute({
-  weather,
-  dark,
-}) {
+const WeatherAlongRoute = memo(function WeatherAlongRoute({ weather, dark }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
-        <Text
-          style={[
-            styles.sectionTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.sectionTitle, dark && styles.darkText]}>
           Weather Along Route
         </Text>
 
-        <Icon
-          name="chevron-forward"
-          color="#64748B"
-        />
+        <Icon name="chevron-forward" color="#64748B" />
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {weather.timeline.map((item) => (
           <View
             key={item.minutes}
@@ -1860,45 +1650,22 @@ const WeatherAlongRoute = memo(function WeatherAlongRoute({
               },
             ]}
           >
-            <Text
-              style={[
-                styles.timelineTime,
-                dark && styles.darkMutedText,
-              ]}
-            >
-              {item.minutes === 0
-                ? "NOW"
-                : `+${item.minutes} min`}
+            <Text style={[styles.timelineTime, dark && styles.darkMutedText]}>
+              {item.minutes === 0 ? "NOW" : `+${item.minutes} min`}
             </Text>
 
             <Icon
-              name={
-                item.icon === "rainy"
-                  ? "rainy"
-                  : "cloud"
-              }
+              name={item.icon === "rainy" ? "rainy" : "cloud"}
               size={28}
-              color={
-                item.condition === "Heavy Rain"
-                  ? "#2563EB"
-                  : "#64748B"
-              }
+              color={item.condition === "Heavy Rain" ? "#2563EB" : "#64748B"}
             />
 
-            <Text
-              style={[
-                styles.timelineTemp,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.timelineTemp, dark && styles.darkText]}>
               {item.temperature}°C
             </Text>
 
             <Text
-              style={[
-                styles.timelineCondition,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.timelineCondition, dark && styles.darkMutedText]}
             >
               {item.condition}
             </Text>
@@ -1907,11 +1674,7 @@ const WeatherAlongRoute = memo(function WeatherAlongRoute({
       </ScrollView>
 
       <View style={styles.routeWeatherMessage}>
-        <Icon
-          name="information-circle"
-          size={18}
-          color="#2563EB"
-        />
+        <Icon name="information-circle" size={18} color="#2563EB" />
         <Text style={styles.routeWeatherMessageText}>
           Heavy rain expected in approximately 18 minutes.
         </Text>
@@ -1928,44 +1691,20 @@ function TrafficSummary({ route, dark }) {
   const color = trafficColor(route.traffic.level);
 
   return (
-    <View
-      style={[
-        styles.halfCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.halfCard, dark && styles.darkSurface]}>
       <View style={styles.cardIconCircle}>
-        <Icon
-          name="car"
-          size={18}
-          color={color}
-        />
+        <Icon name="car" size={18} color={color} />
       </View>
 
-      <Text
-        style={[
-          styles.smallCardTitle,
-          dark && styles.darkText,
-        ]}
-      >
+      <Text style={[styles.smallCardTitle, dark && styles.darkText]}>
         Traffic
       </Text>
 
-      <Text
-        style={[
-          styles.bigCardValue,
-          { color },
-        ]}
-      >
+      <Text style={[styles.bigCardValue, { color }]}>
         {capitalize(route.traffic.level)}
       </Text>
 
-      <Text
-        style={[
-          styles.smallCardSubtitle,
-          dark && styles.darkMutedText,
-        ]}
-      >
+      <Text style={[styles.smallCardSubtitle, dark && styles.darkMutedText]}>
         +{route.traffic.delayMin} min delay
       </Text>
 
@@ -1993,59 +1732,24 @@ function RoadConditionCard({ route, dark }) {
   const color = scoreColor(score);
 
   return (
-    <View
-      style={[
-        styles.halfCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.halfCard, dark && styles.darkSurface]}>
       <View style={styles.cardIconCircle}>
-        <Icon
-          name="road"
-          library="material"
-          size={18}
-          color={color}
-        />
+        <Icon name="road" library="material" size={18} color={color} />
       </View>
 
-      <Text
-        style={[
-          styles.smallCardTitle,
-          dark && styles.darkText,
-        ]}
-      >
+      <Text style={[styles.smallCardTitle, dark && styles.darkText]}>
         Road condition
       </Text>
 
-      <Text
-        style={[
-          styles.bigCardValue,
-          { color },
-        ]}
-      >
-        {score >= 85
-          ? "Good"
-          : score >= 70
-          ? "Moderate"
-          : "Risky"}
+      <Text style={[styles.bigCardValue, { color }]}>
+        {score >= 85 ? "Good" : score >= 70 ? "Moderate" : "Risky"}
       </Text>
 
-      <Text
-        style={[
-          styles.smallCardSubtitle,
-          dark && styles.darkMutedText,
-        ]}
-      >
-        {route.road.potholes} potholes ·{" "}
-        {route.road.construction} construction
+      <Text style={[styles.smallCardSubtitle, dark && styles.darkMutedText]}>
+        {route.road.potholes} potholes · {route.road.construction} construction
       </Text>
 
-      <Text
-        style={[
-          styles.progressLabel,
-          { marginTop: 10 },
-        ]}
-      >
+      <Text style={[styles.progressLabel, { marginTop: 10 }]}>
         Flood risk {route.road.floodRisk}%
       </Text>
     </View>
@@ -2056,10 +1760,7 @@ function RoadConditionCard({ route, dark }) {
    ALERTS
 ============================================================ */
 
-const SmartAlert = memo(function SmartAlert({
-  alert,
-  onDismiss,
-}) {
+const SmartAlert = memo(function SmartAlert({ alert, onDismiss }) {
   const color = severityColor(alert.severity);
 
   return (
@@ -2080,24 +1781,16 @@ const SmartAlert = memo(function SmartAlert({
         ]}
       >
         <Icon
-          name={
-            alert.severity === SEVERITY.INFO
-              ? "information"
-              : "warning"
-          }
+          name={alert.severity === SEVERITY.INFO ? "information" : "warning"}
           color={color}
           size={18}
         />
       </View>
 
       <View style={{ flex: 1 }}>
-        <Text style={styles.alertTitle}>
-          {alert.title}
-        </Text>
+        <Text style={styles.alertTitle}>{alert.title}</Text>
 
-        <Text style={styles.alertMessage}>
-          {alert.message}
-        </Text>
+        <Text style={styles.alertMessage}>{alert.message}</Text>
       </View>
 
       <Pressable
@@ -2105,11 +1798,7 @@ const SmartAlert = memo(function SmartAlert({
         style={styles.alertClose}
         accessibilityLabel="Dismiss alert"
       >
-        <Icon
-          name="close"
-          size={18}
-          color="#64748B"
-        />
+        <Icon name="close" size={18} color="#64748B" />
       </Pressable>
     </View>
   );
@@ -2119,58 +1808,27 @@ const SmartAlert = memo(function SmartAlert({
    ROUTE COMPARISON
 ============================================================ */
 
-function RouteComparison({
-  routes,
-  scores,
-  dark,
-}) {
+function RouteComparison({ routes, scores, dark }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
-        <Text
-          style={[
-            styles.sectionTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.sectionTitle, dark && styles.darkText]}>
           Compare Routes
         </Text>
 
-        <Icon
-          name="analytics"
-          size={20}
-          color="#2563EB"
-        />
+        <Icon name="analytics" size={20} color="#2563EB" />
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.comparisonTable}>
           <View style={styles.comparisonRow}>
             <View style={styles.metricColumn}>
-              <Text style={styles.tableHeader}>
-                Metric
-              </Text>
+              <Text style={styles.tableHeader}>Metric</Text>
             </View>
 
             {routes.slice(0, 3).map((route) => (
-              <View
-                key={route.id}
-                style={styles.routeColumn}
-              >
-                <Text
-                  style={[
-                    styles.tableHeader,
-                    { color: "#2563EB" },
-                  ]}
-                >
+              <View key={route.id} style={styles.routeColumn}>
+                <Text style={[styles.tableHeader, { color: "#2563EB" }]}>
                   {route.label}
                 </Text>
               </View>
@@ -2180,46 +1838,21 @@ function RouteComparison({
           {[
             ["Distance", (r) => `${r.distanceKm} km`],
             ["ETA", (r) => `${r.etaMin} min`],
-            [
-              "Safety",
-              (r) => `${scores[r.id]?.safetyScore || 0}`,
-            ],
-            [
-              "Weather",
-              (r) => `${scores[r.id]?.weatherScore || 0}`,
-            ],
-            [
-              "Traffic",
-              (r) => capitalize(r.traffic.level),
-            ],
+            ["Safety", (r) => `${scores[r.id]?.safetyScore || 0}`],
+            ["Weather", (r) => `${scores[r.id]?.weatherScore || 0}`],
+            ["Traffic", (r) => capitalize(r.traffic.level)],
             ["Toll", (r) => `₹${r.toll}`],
           ].map(([label, getter]) => (
-            <View
-              key={label}
-              style={styles.comparisonRow}
-            >
+            <View key={label} style={styles.comparisonRow}>
               <View style={styles.metricColumn}>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    dark && styles.darkMutedText,
-                  ]}
-                >
+                <Text style={[styles.tableCell, dark && styles.darkMutedText]}>
                   {label}
                 </Text>
               </View>
 
               {routes.slice(0, 3).map((route) => (
-                <View
-                  key={route.id}
-                  style={styles.routeColumn}
-                >
-                  <Text
-                    style={[
-                      styles.tableCell,
-                      dark && styles.darkText,
-                    ]}
-                  >
+                <View key={route.id} style={styles.routeColumn}>
+                  <Text style={[styles.tableCell, dark && styles.darkText]}>
                     {getter(route)}
                   </Text>
                 </View>
@@ -2274,73 +1907,46 @@ function RoutePreferencesSheet({
       onRequestClose={onClose}
     >
       <View style={styles.sheetOverlay}>
-        <View
-          style={[
-            styles.sheet,
-            dark && styles.darkSurface,
-          ]}
-        >
+        <View style={[styles.sheet, dark && styles.darkSurface]}>
           <View style={styles.sheetHandle} />
 
           <View style={styles.sheetHeader}>
-            <Text
-              style={[
-                styles.sheetTitle,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.sheetTitle, dark && styles.darkText]}>
               Route Preferences
             </Text>
 
             <Pressable onPress={onClose}>
-              <Icon
-                name="close"
-                color={dark ? "#F8FAFC" : "#0F172A"}
-              />
+              <Icon name="close" color={dark ? "#F8FAFC" : "#0F172A"} />
             </Pressable>
           </View>
 
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollView showsVerticalScrollIndicator={false}>
             <Text
-              style={[
-                styles.sheetSectionLabel,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.sheetSectionLabel, dark && styles.darkMutedText]}
             >
               VEHICLE
             </Text>
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {Object.values(VEHICLES).map((item) => (
                 <Pressable
                   key={item}
                   onPress={() => setVehicle(item)}
                   style={[
                     styles.vehicleChip,
-                    vehicle === item &&
-                      styles.vehicleChipActive,
+                    vehicle === item && styles.vehicleChipActive,
                   ]}
                 >
                   <Icon
                     name={vehicleIcon(item)}
                     size={18}
-                    color={
-                      vehicle === item
-                        ? "#FFFFFF"
-                        : "#2563EB"
-                    }
+                    color={vehicle === item ? "#FFFFFF" : "#2563EB"}
                   />
 
                   <Text
                     style={[
                       styles.vehicleChipText,
-                      vehicle === item &&
-                        styles.vehicleChipTextActive,
+                      vehicle === item && styles.vehicleChipTextActive,
                     ]}
                   >
                     {vehicleLabel(item)}
@@ -2350,75 +1956,49 @@ function RoutePreferencesSheet({
             </ScrollView>
 
             <Text
-              style={[
-                styles.sheetSectionLabel,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.sheetSectionLabel, dark && styles.darkMutedText]}
             >
               SMART PREFERENCES
             </Text>
 
-            {options.map(
-              ([key, label, icon]) => (
-                <View
-                  key={key}
-                  style={styles.preferenceRow}
-                >
-                  <View style={styles.preferenceLeft}>
-                    <Icon
-                      name={icon}
-                      library={
-                        icon === "road"
-                          ? "material"
-                          : "ion"
-                      }
-                      color="#2563EB"
-                      size={20}
-                    />
-
-                    <Text
-                      style={[
-                        styles.preferenceText,
-                        dark && styles.darkText,
-                      ]}
-                    >
-                      {label}
-                    </Text>
-                  </View>
-
-                  <Switch
-                    value={!!preferences[key]}
-                    onValueChange={(value) =>
-                      update(key, value)
-                    }
-                    trackColor={{
-                      false: "#CBD5E1",
-                      true: "#93C5FD",
-                    }}
-                    thumbColor={
-                      preferences[key]
-                        ? "#2563EB"
-                        : "#F8FAFC"
-                    }
-                    accessibilityLabel={label}
+            {options.map(([key, label, icon]) => (
+              <View key={key} style={styles.preferenceRow}>
+                <View style={styles.preferenceLeft}>
+                  <Icon
+                    name={icon}
+                    library={icon === "road" ? "material" : "ion"}
+                    color="#2563EB"
+                    size={20}
                   />
+
+                  <Text
+                    style={[styles.preferenceText, dark && styles.darkText]}
+                  >
+                    {label}
+                  </Text>
                 </View>
-              )
-            )}
+
+                <Switch
+                  value={!!preferences[key]}
+                  onValueChange={(value) => update(key, value)}
+                  trackColor={{
+                    false: "#CBD5E1",
+                    true: "#93C5FD",
+                  }}
+                  thumbColor={preferences[key] ? "#2563EB" : "#F8FAFC"}
+                  accessibilityLabel={label}
+                />
+              </View>
+            ))}
 
             <Text
-              style={[
-                styles.sheetSectionLabel,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.sheetSectionLabel, dark && styles.darkMutedText]}
             >
               SAFETY ↔ SPEED
             </Text>
 
             <View style={styles.sliderFake}>
-              <Text style={styles.sliderLabel}>
-                Safety
-              </Text>
+              <Text style={styles.sliderLabel}>Safety</Text>
 
               <View style={styles.sliderTrack}>
                 <View
@@ -2440,43 +2020,28 @@ function RoutePreferencesSheet({
                 />
               </View>
 
-              <Text style={styles.sliderLabel}>
-                Speed
-              </Text>
+              <Text style={styles.sliderLabel}>Speed</Text>
             </View>
 
             <View style={styles.sliderButtons}>
               <Pressable
-                onPress={() =>
-                  update("safetySpeed", 20)
-                }
+                onPress={() => update("safetySpeed", 20)}
                 style={styles.sliderOption}
               >
-                <Text style={styles.sliderOptionText}>
-                  More Safety
-                </Text>
+                <Text style={styles.sliderOptionText}>More Safety</Text>
               </Pressable>
 
               <Pressable
-                onPress={() =>
-                  update("safetySpeed", 80)
-                }
+                onPress={() => update("safetySpeed", 80)}
                 style={styles.sliderOption}
               >
-                <Text style={styles.sliderOptionText}>
-                  More Speed
-                </Text>
+                <Text style={styles.sliderOptionText}>More Speed</Text>
               </Pressable>
             </View>
           </ScrollView>
 
-          <Pressable
-            style={styles.applyButton}
-            onPress={onClose}
-          >
-            <Text style={styles.applyButtonText}>
-              Apply Preferences
-            </Text>
+          <Pressable style={styles.applyButton} onPress={onClose}>
+            <Text style={styles.applyButtonText}>Apply Preferences</Text>
           </Pressable>
         </View>
       </View>
@@ -2520,10 +2085,7 @@ function RouteLoadingSkeleton({ dark }) {
           },
         ]}
       >
-        <ActivityIndicator
-          size="large"
-          color="#2563EB"
-        />
+        <ActivityIndicator size="large" color="#2563EB" />
       </View>
 
       <LoadingRow text="Searching routes..." />
@@ -2539,15 +2101,10 @@ function LoadingRow({ text }) {
   return (
     <View style={styles.loadingRow}>
       <View style={styles.loadingPulse}>
-        <ActivityIndicator
-          size="small"
-          color="#2563EB"
-        />
+        <ActivityIndicator size="small" color="#2563EB" />
       </View>
 
-      <Text style={styles.loadingText}>
-        {text}
-      </Text>
+      <Text style={styles.loadingText}>{text}</Text>
     </View>
   );
 }
@@ -2574,28 +2131,15 @@ function NavigationBottomSheet({
       onRequestClose={onClose}
     >
       <View style={styles.navigationOverlay}>
-        <View
-          style={[
-            styles.navigationSheet,
-            dark && styles.darkSurface,
-          ]}
-        >
+        <View style={[styles.navigationSheet, dark && styles.darkSurface]}>
           <View style={styles.sheetHandle} />
 
-          <Text
-            style={[
-              styles.navigationTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.navigationTitle, dark && styles.darkText]}>
             Ready to navigate
           </Text>
 
           <Text
-            style={[
-              styles.navigationDestination,
-              dark && styles.darkMutedText,
-            ]}
+            style={[styles.navigationDestination, dark && styles.darkMutedText]}
           >
             {route.name} → Destination
           </Text>
@@ -2621,11 +2165,7 @@ function NavigationBottomSheet({
 
             <NavigationStat
               icon="rainy-outline"
-              value={
-                weather.rainProbability > 60
-                  ? "Rain"
-                  : "Low"
-              }
+              value={weather.rainProbability > 60 ? "Rain" : "Low"}
               label="Weather"
             />
           </View>
@@ -2634,60 +2174,33 @@ function NavigationBottomSheet({
             style={styles.startNavigationButton}
             onPress={() => {
               onClose();
-              Alert.alert(
-                "Navigation started",
-                `Following ${route.name}.`
-              );
+              Alert.alert("Navigation started", `Following ${route.name}.`);
             }}
           >
-            <Icon
-              name="navigate"
-              color="#FFFFFF"
-              size={21}
-            />
+            <Icon name="navigate" color="#FFFFFF" size={21} />
 
-            <Text
-              style={styles.startNavigationText}
-            >
-              Start Navigation
-            </Text>
+            <Text style={styles.startNavigationText}>Start Navigation</Text>
           </Pressable>
 
           <View style={styles.secondaryButtons}>
             <Pressable
               style={styles.secondaryButton}
               onPress={() =>
-                Alert.alert(
-                  "Preview Route",
-                  "Route preview opened."
-                )
+                Alert.alert("Preview Route", "Route preview opened.")
               }
             >
-              <Icon
-                name="eye-outline"
-                color="#2563EB"
-              />
-              <Text style={styles.secondaryText}>
-                Preview Route
-              </Text>
+              <Icon name="eye-outline" color="#2563EB" />
+              <Text style={styles.secondaryText}>Preview Route</Text>
             </Pressable>
 
             <Pressable
               style={styles.secondaryButton}
               onPress={() =>
-                Alert.alert(
-                  "Share Route",
-                  "Route sharing opened."
-                )
+                Alert.alert("Share Route", "Route sharing opened.")
               }
             >
-              <Icon
-                name="share-outline"
-                color="#2563EB"
-              />
-              <Text style={styles.secondaryText}>
-                Share Route
-              </Text>
+              <Icon name="share-outline" color="#2563EB" />
+              <Text style={styles.secondaryText}>Share Route</Text>
             </Pressable>
           </View>
         </View>
@@ -2696,26 +2209,14 @@ function NavigationBottomSheet({
   );
 }
 
-function NavigationStat({
-  icon,
-  value,
-  label,
-}) {
+function NavigationStat({ icon, value, label }) {
   return (
     <View style={styles.navigationStat}>
-      <Icon
-        name={icon}
-        color="#2563EB"
-        size={20}
-      />
+      <Icon name={icon} color="#2563EB" size={20} />
 
-      <Text style={styles.navigationValue}>
-        {value}
-      </Text>
+      <Text style={styles.navigationValue}>{value}</Text>
 
-      <Text style={styles.navigationLabel}>
-        {label}
-      </Text>
+      <Text style={styles.navigationLabel}>{label}</Text>
     </View>
   );
 }
@@ -2726,25 +2227,17 @@ function NavigationStat({
 
 export default function SmartRouteScreen() {
   const systemTheme = useColorScheme();
-  const [dark, setDark] = useState(
-    systemTheme === "dark"
-  );
+  const [dark, setDark] = useState(systemTheme === "dark");
 
-  const [destination, setDestination] =
-    useState("Main Road, Ranchi");
+  const [destination, setDestination] = useState("Asam Police Bazar");
 
-  const [destinationModal, setDestinationModal] =
-    useState(false);
+  const [destinationModal, setDestinationModal] = useState(false);
 
-  const [preferencesModal, setPreferencesModal] =
-    useState(false);
+  const [preferencesModal, setPreferencesModal] = useState(false);
 
-  const [navigationModal, setNavigationModal] =
-    useState(false);
+  const [navigationModal, setNavigationModal] = useState(false);
 
-  const [vehicle, setVehicle] = useState(
-    VEHICLES.CAR
-  );
+  const [vehicle, setVehicle] = useState(VEHICLES.CAR);
 
   const [preferences, setPreferences] = useState({
     prioritizeSafety: true,
@@ -2763,59 +2256,48 @@ export default function SmartRouteScreen() {
 
   const [routes, setRoutes] = useState([]);
   const [scores, setScores] = useState({});
-  const [selectedRoute, setSelectedRoute] =
-    useState(null);
+  const [selectedRoute, setSelectedRoute] = useState(null);
 
   const [weather, setWeather] = useState(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState(null);
 
   const [alerts, setAlerts] = useState([]);
 
-  const fadeAnim = useRef(
-    new Animated.Value(0)
-  ).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const loadRoutes = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const routeData =
-        await RouteService.getRoutes(
-          ORIGIN,
-          DESTINATION
-        );
+      const routeData = await RouteService.getRoutes(ORIGIN, DESTINATION);
 
       if (!routeData.length) {
         throw new Error("No route found");
       }
 
-      const primaryWeather =
-        await WeatherService.getWeatherAlongRoute(
-          routeData[0]
-        );
+      const primaryWeather = await WeatherService.getWeatherAlongRoute(
+        routeData[0],
+      );
 
       const enrichedScores = {};
 
       routeData.forEach((route) => {
-        enrichedScores[route.id] =
-          calculateRouteScore(
-            route,
-            primaryWeather,
-            routeData,
-            preferences,
-            vehicle
-          );
+        enrichedScores[route.id] = calculateRouteScore(
+          route,
+          primaryWeather,
+          routeData,
+          preferences,
+          vehicle,
+        );
       });
 
       const sorted = [...routeData].sort(
         (a, b) =>
-          enrichedScores[b.id].totalScore -
-          enrichedScores[a.id].totalScore
+          enrichedScores[b.id].totalScore - enrichedScores[a.id].totalScore,
       );
 
       setRoutes(sorted);
@@ -2839,42 +2321,24 @@ export default function SmartRouteScreen() {
         useNativeDriver: true,
       }).start();
     } catch (err) {
-      setError(
-        "Weather or route data is temporarily unavailable."
-      );
+      setError("Weather or route data is temporarily unavailable.");
     } finally {
       setLoading(false);
     }
-  }, [
-    fadeAnim,
-    preferences,
-    vehicle,
-  ]);
+  }, [fadeAnim, preferences, vehicle]);
 
   useEffect(() => {
     loadRoutes();
   }, [loadRoutes]);
 
   const recommendedRoute = routes[0];
-  const recommendedScore =
-    recommendedRoute &&
-    scores[recommendedRoute.id];
+  const recommendedScore = recommendedRoute && scores[recommendedRoute.id];
 
-  const alternativeRoutes = useMemo(
-    () => routes.slice(1),
-    [routes]
-  );
+  const alternativeRoutes = useMemo(() => routes.slice(1), [routes]);
 
-  const dismissAlert = useCallback(
-    (id) => {
-      setAlerts((previous) =>
-        previous.filter(
-          (alert) => alert.id !== id
-        )
-      );
-    },
-    []
-  );
+  const dismissAlert = useCallback((id) => {
+    setAlerts((previous) => previous.filter((alert) => alert.id !== id));
+  }, []);
 
   const selectRoute = useCallback((route) => {
     setSelectedRoute(route);
@@ -2889,7 +2353,7 @@ export default function SmartRouteScreen() {
         loadRoutes();
       }, 100);
     },
-    [loadRoutes]
+    [loadRoutes],
   );
 
   const swapDestination = useCallback(() => {
@@ -2898,24 +2362,13 @@ export default function SmartRouteScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          dark && styles.darkBackground,
-        ]}
-      >
-        <StatusBar
-          barStyle={
-            dark ? "light-content" : "dark-content"
-          }
-        />
+      <SafeAreaView style={[styles.container, dark && styles.darkBackground]}>
+        <StatusBar barStyle={dark ? "light-content" : "dark-content"} />
 
         <RouteHeader
           dark={dark}
           vehicle={vehicle}
-          onSettings={() =>
-            setPreferencesModal(true)
-          }
+          onSettings={() => setPreferencesModal(true)}
         />
 
         <RouteLoadingSkeleton dark={dark} />
@@ -2927,9 +2380,7 @@ export default function SmartRouteScreen() {
           setPreferences={setPreferences}
           vehicle={vehicle}
           setVehicle={setVehicle}
-          onClose={() =>
-            setPreferencesModal(false)
-          }
+          onClose={() => setPreferencesModal(false)}
         />
       </SafeAreaView>
     );
@@ -2937,61 +2388,31 @@ export default function SmartRouteScreen() {
 
   if (error || !recommendedRoute) {
     return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          dark && styles.darkBackground,
-        ]}
-      >
+      <SafeAreaView style={[styles.container, dark && styles.darkBackground]}>
         <RouteHeader
           dark={dark}
           vehicle={vehicle}
-          onSettings={() =>
-            setPreferencesModal(true)
-          }
+          onSettings={() => setPreferencesModal(true)}
         />
 
         <View style={styles.errorContainer}>
           <View style={styles.errorIcon}>
-            <Icon
-              name="cloud-offline-outline"
-              size={42}
-              color="#DC2626"
-            />
+            <Icon name="cloud-offline-outline" size={42} color="#DC2626" />
           </View>
 
-          <Text
-            style={[
-              styles.errorTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.errorTitle, dark && styles.darkText]}>
             Route data unavailable
           </Text>
 
-          <Text
-            style={[
-              styles.errorText,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            Weather data unavailable. Route
-            recommendation can continue using
+          <Text style={[styles.errorText, dark && styles.darkMutedText]}>
+            Weather data unavailable. Route recommendation can continue using
             traffic, road and distance data.
           </Text>
 
-          <Pressable
-            style={styles.retryButton}
-            onPress={loadRoutes}
-          >
-            <Icon
-              name="refresh"
-              color="#FFFFFF"
-            />
+          <Pressable style={styles.retryButton} onPress={loadRoutes}>
+            <Icon name="refresh" color="#FFFFFF" />
 
-            <Text style={styles.retryText}>
-              Recalculate Route
-            </Text>
+            <Text style={styles.retryText}>Recalculate Route</Text>
           </Pressable>
         </View>
       </SafeAreaView>
@@ -2999,24 +2420,13 @@ export default function SmartRouteScreen() {
   }
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        dark && styles.darkBackground,
-      ]}
-    >
-      <StatusBar
-        barStyle={
-          dark ? "light-content" : "dark-content"
-        }
-      />
+    <SafeAreaView style={[styles.container, dark && styles.darkBackground]}>
+      <StatusBar barStyle={dark ? "light-content" : "dark-content"} />
 
       <RouteHeader
         dark={dark}
         vehicle={vehicle}
-        onSettings={() =>
-          setPreferencesModal(true)
-        }
+        onSettings={() => setPreferencesModal(true)}
       />
 
       <ScrollView
@@ -3026,9 +2436,7 @@ export default function SmartRouteScreen() {
         <LocationSelector
           dark={dark}
           destination={destination}
-          onDestination={() =>
-            setDestinationModal(true)
-          }
+          onDestination={() => setDestinationModal(true)}
           onSwap={swapDestination}
         />
 
@@ -3045,9 +2453,7 @@ export default function SmartRouteScreen() {
           <View style={styles.liveStatus}>
             <View style={styles.liveDot} />
 
-            <Text style={styles.liveStatusText}>
-              Live conditions
-            </Text>
+            <Text style={styles.liveStatusText}>Live conditions</Text>
           </View>
 
           <Pressable
@@ -3055,15 +2461,9 @@ export default function SmartRouteScreen() {
             onPress={loadRoutes}
             accessibilityLabel="Recalculate routes"
           >
-            <Icon
-              name="refresh"
-              size={17}
-              color="#2563EB"
-            />
+            <Icon name="refresh" size={17} color="#2563EB" />
 
-            <Text style={styles.refreshText}>
-              Recalculate
-            </Text>
+            <Text style={styles.refreshText}>Recalculate</Text>
           </Pressable>
         </View>
 
@@ -3074,9 +2474,7 @@ export default function SmartRouteScreen() {
               <SmartAlert
                 key={alert.id}
                 alert={alert}
-                onDismiss={() =>
-                  dismissAlert(alert.id)
-                }
+                onDismiss={() => dismissAlert(alert.id)}
               />
             ))}
           </View>
@@ -3094,9 +2492,7 @@ export default function SmartRouteScreen() {
               score={recommendedScore}
               dark={dark}
               vehicle={vehicle}
-              onPress={() =>
-                setNavigationModal(true)
-              }
+              onPress={() => setNavigationModal(true)}
             />
           </Animated.View>
         )}
@@ -3114,27 +2510,15 @@ export default function SmartRouteScreen() {
             route={route}
             score={scores[route.id]}
             dark={dark}
-            selected={
-              route.id === selectedRoute?.id
-            }
+            selected={route.id === selectedRoute?.id}
             onPress={() => selectRoute(route)}
           />
         ))}
 
         {/* WEATHER */}
-        {weather && (
-          <WeatherSummary
-            weather={weather}
-            dark={dark}
-          />
-        )}
+        {weather && <WeatherSummary weather={weather} dark={dark} />}
 
-        {weather && (
-          <WeatherAlongRoute
-            weather={weather}
-            dark={dark}
-          />
-        )}
+        {weather && <WeatherAlongRoute weather={weather} dark={dark} />}
 
         {/* TRAFFIC / ROAD */}
         <SectionHeading
@@ -3144,114 +2528,71 @@ export default function SmartRouteScreen() {
         />
 
         <View style={styles.twoColumn}>
-          <TrafficSummary
-            route={selectedRoute}
-            dark={dark}
-          />
+          <TrafficSummary route={selectedRoute} dark={dark} />
 
-          <RoadConditionCard
-            route={selectedRoute}
-            dark={dark}
-          />
+          <RoadConditionCard route={selectedRoute} dark={dark} />
         </View>
 
         {/* HAZARDS */}
         {selectedRoute.hazards.length > 0 && (
-          <View
-            style={[
-              styles.sectionCard,
-              dark && styles.darkSurface,
-            ]}
-          >
+          <View style={[styles.sectionCard, dark && styles.darkSurface]}>
             <View style={styles.sectionHeader}>
-              <Text
-                style={[
-                  styles.sectionTitle,
-                  dark && styles.darkText,
-                ]}
-              >
+              <Text style={[styles.sectionTitle, dark && styles.darkText]}>
                 Road Hazards
               </Text>
 
               <View style={styles.hazardCount}>
-                <Text
-                  style={styles.hazardCountText}
-                >
+                <Text style={styles.hazardCountText}>
                   {selectedRoute.hazards.length}
                 </Text>
               </View>
             </View>
 
-            {selectedRoute.hazards.map(
-              (hazard) => (
+            {selectedRoute.hazards.map((hazard) => (
+              <View key={hazard.id} style={styles.hazardRow}>
                 <View
-                  key={hazard.id}
-                  style={styles.hazardRow}
+                  style={[
+                    styles.hazardIcon,
+                    {
+                      backgroundColor: `${severityColor(hazard.severity)}18`,
+                    },
+                  ]}
                 >
-                  <View
-                    style={[
-                      styles.hazardIcon,
-                      {
-                        backgroundColor:
-                          `${severityColor(
-                            hazard.severity
-                          )}18`,
-                      },
-                    ]}
-                  >
-                    <Icon
-                      name={
-                        hazard.type === "waterlogging"
-                          ? "water"
-                          : hazard.type ===
-                            "accident"
+                  <Icon
+                    name={
+                      hazard.type === "waterlogging"
+                        ? "water"
+                        : hazard.type === "accident"
                           ? "car-crash"
                           : "construct"
-                      }
-                      library={
-                        hazard.type === "accident"
-                          ? "material"
-                          : "ion"
-                      }
-                      size={18}
-                      color={severityColor(
-                        hazard.severity
-                      )}
-                    />
-                  </View>
-
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={[
-                        styles.hazardTitle,
-                        dark && styles.darkText,
-                      ]}
-                    >
-                      {hazard.title}
-                    </Text>
-
-                    <Text
-                      style={[
-                        styles.hazardDescription,
-                        dark &&
-                          styles.darkMutedText,
-                      ]}
-                    >
-                      {hazard.description}
-                    </Text>
-                  </View>
+                    }
+                    library={hazard.type === "accident" ? "material" : "ion"}
+                    size={18}
+                    color={severityColor(hazard.severity)}
+                  />
                 </View>
-              )
-            )}
+
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.hazardTitle, dark && styles.darkText]}>
+                    {hazard.title}
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.hazardDescription,
+                      dark && styles.darkMutedText,
+                    ]}
+                  >
+                    {hazard.description}
+                  </Text>
+                </View>
+              </View>
+            ))}
           </View>
         )}
 
         {/* COMPARISON */}
-        <RouteComparison
-          routes={routes}
-          scores={scores}
-          dark={dark}
-        />
+        <RouteComparison routes={routes} scores={scores} dark={dark} />
 
         {/* AI EXPLANATION */}
         <View
@@ -3264,17 +2605,11 @@ export default function SmartRouteScreen() {
         >
           <View style={styles.aiHeader}>
             <View style={styles.aiIcon}>
-              <Icon
-                name="sparkles"
-                color="#FFFFFF"
-                size={19}
-              />
+              <Icon name="sparkles" color="#FFFFFF" size={19} />
             </View>
 
             <View style={{ flex: 1 }}>
-              <Text style={styles.aiTitle}>
-                Why this route?
-              </Text>
+              <Text style={styles.aiTitle}>Why this route?</Text>
 
               <Text style={styles.aiSubtitle}>
                 Explainable Smart Route analysis
@@ -3283,77 +2618,41 @@ export default function SmartRouteScreen() {
           </View>
 
           <Text style={styles.aiMainText}>
-            Recommended because this route provides
-            the best balance of safety, weather,
-            traffic, road quality and travel time.
+            Recommended because this route provides the best balance of safety,
+            weather, traffic, road quality and travel time.
           </Text>
 
           <View style={styles.aiReasonList}>
-            {recommendedScore.reasons
-              .slice(0, 4)
-              .map((reason) => (
-                <View
-                  key={reason}
-                  style={styles.aiReason}
-                >
-                  <Icon
-                    name="checkmark-circle"
-                    size={18}
-                    color="#60A5FA"
-                  />
+            {recommendedScore.reasons.slice(0, 4).map((reason) => (
+              <View key={reason} style={styles.aiReason}>
+                <Icon name="checkmark-circle" size={18} color="#60A5FA" />
 
-                  <Text style={styles.aiReasonText}>
-                    {reason}
-                  </Text>
-                </View>
-              ))}
+                <Text style={styles.aiReasonText}>{reason}</Text>
+              </View>
+            ))}
           </View>
         </View>
 
         {/* VEHICLE */}
-        <View
-          style={[
-            styles.vehicleInfo,
-            dark && styles.darkSurface,
-          ]}
-        >
+        <View style={[styles.vehicleInfo, dark && styles.darkSurface]}>
           <View style={styles.vehicleIcon}>
-            <Icon
-              name={vehicleIcon(vehicle)}
-              color="#2563EB"
-              size={22}
-            />
+            <Icon name={vehicleIcon(vehicle)} color="#2563EB" size={22} />
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text
-              style={[
-                styles.vehicleTitle,
-                dark && styles.darkText,
-              ]}
-            >
+            <Text style={[styles.vehicleTitle, dark && styles.darkText]}>
               {vehicleLabel(vehicle)} profile
             </Text>
 
             <Text
-              style={[
-                styles.vehicleSubtitle,
-                dark && styles.darkMutedText,
-              ]}
+              style={[styles.vehicleSubtitle, dark && styles.darkMutedText]}
             >
-              Route scoring is adjusted for your
-              selected vehicle.
+              Route scoring is adjusted for your selected vehicle.
             </Text>
           </View>
 
-          <Pressable
-            onPress={() =>
-              setPreferencesModal(true)
-            }
-          >
-            <Text style={styles.changeText}>
-              Change
-            </Text>
+          <Pressable onPress={() => setPreferencesModal(true)}>
+            <Text style={styles.changeText}>Change</Text>
           </Pressable>
         </View>
 
@@ -3362,50 +2661,27 @@ export default function SmartRouteScreen() {
       </ScrollView>
 
       {/* STICKY CTA */}
-      <View
-        style={[
-          styles.bottomBar,
-          dark && styles.darkSurface,
-        ]}
-      >
+      <View style={[styles.bottomBar, dark && styles.darkSurface]}>
         <View style={{ flex: 1 }}>
-          <Text
-            style={[
-              styles.bottomEta,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.bottomEta, dark && styles.darkText]}>
             {recommendedRoute.etaMin} min
           </Text>
 
-          <Text
-            style={[
-              styles.bottomDistance,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            {recommendedRoute.distanceKm} km ·{" "}
-            Safety {recommendedScore.totalScore}/100
+          <Text style={[styles.bottomDistance, dark && styles.darkMutedText]}>
+            {recommendedRoute.distanceKm} km · Safety{" "}
+            {recommendedScore.totalScore}/100
           </Text>
         </View>
 
         <Pressable
           style={styles.navigationButton}
-          onPress={() =>
-            setNavigationModal(true)
-          }
+          onPress={() => setNavigationModal(true)}
           accessibilityRole="button"
           accessibilityLabel="Start navigation"
         >
-          <Icon
-            name="navigate"
-            color="#FFFFFF"
-            size={21}
-          />
+          <Icon name="navigate" color="#FFFFFF" size={21} />
 
-          <Text style={styles.navigationButtonText}>
-            Start Navigation
-          </Text>
+          <Text style={styles.navigationButtonText}>Start Navigation</Text>
         </Pressable>
       </View>
 
@@ -3413,9 +2689,7 @@ export default function SmartRouteScreen() {
       <DestinationSearch
         visible={destinationModal}
         dark={dark}
-        onClose={() =>
-          setDestinationModal(false)
-        }
+        onClose={() => setDestinationModal(false)}
         onSelect={handleDestination}
       />
 
@@ -3438,9 +2712,7 @@ export default function SmartRouteScreen() {
         score={recommendedScore}
         weather={weather}
         dark={dark}
-        onClose={() =>
-          setNavigationModal(false)
-        }
+        onClose={() => setNavigationModal(false)}
       />
     </SafeAreaView>
   );
@@ -3450,28 +2722,14 @@ export default function SmartRouteScreen() {
    SECTION HEADING
 ============================================================ */
 
-function SectionHeading({
-  title,
-  subtitle,
-  dark,
-}) {
+function SectionHeading({ title, subtitle, dark }) {
   return (
     <View style={styles.sectionHeading}>
-      <Text
-        style={[
-          styles.headingTitle,
-          dark && styles.darkText,
-        ]}
-      >
+      <Text style={[styles.headingTitle, dark && styles.darkText]}>
         {title}
       </Text>
 
-      <Text
-        style={[
-          styles.headingSubtitle,
-          dark && styles.darkMutedText,
-        ]}
-      >
+      <Text style={[styles.headingSubtitle, dark && styles.darkMutedText]}>
         {subtitle}
       </Text>
     </View>
@@ -4458,8 +3716,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#E2E8F0",
     paddingHorizontal: 16,
     paddingTop: 10,
-    paddingBottom:
-      Platform.OS === "ios" ? 16 : 10,
+    paddingBottom: Platform.OS === "ios" ? 16 : 10,
     flexDirection: "row",
     alignItems: "center",
   },

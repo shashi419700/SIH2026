@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AlertCard from "./AlertCard";
 
-const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
+// const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
 
 /*
   WMO Weather Codes
