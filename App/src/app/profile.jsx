@@ -14,10 +14,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 /* ============================================================
@@ -31,22 +28,10 @@ const Icon = memo(function Icon({
   library = "ion",
 }) {
   if (library === "material") {
-    return (
-      <MaterialCommunityIcons
-        name={name}
-        size={size}
-        color={color}
-      />
-    );
+    return <MaterialCommunityIcons name={name} size={size} color={color} />;
   }
 
-  return (
-    <Ionicons
-      name={name}
-      size={size}
-      color={color}
-    />
-  );
+  return <Ionicons name={name} size={size} color={color} />;
 });
 
 /* ============================================================
@@ -55,12 +40,7 @@ const Icon = memo(function Icon({
 
 function ProfileCard({ dark, onEdit }) {
   return (
-    <View
-      style={[
-        styles.profileCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.profileCard, dark && styles.darkSurface]}>
       <View style={styles.profileTop}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>SK</Text>
@@ -68,69 +48,34 @@ function ProfileCard({ dark, onEdit }) {
         </View>
 
         <View style={styles.profileIdentity}>
-          <Text
-            style={[
-              styles.profileName,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.profileName, dark && styles.darkText]}>
             Shashi Kumar
           </Text>
 
-          <Text
-            style={[
-              styles.profileEmail,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.profileEmail, dark && styles.darkMutedText]}>
             codewithshashi009@gmail.com
           </Text>
 
           <View style={styles.memberBadge}>
-            <Icon
-              name="shield-checkmark"
-              size={13}
-              color="#2563EB"
-            />
+            <Icon name="shield-checkmark" size={13} color="#2563EB" />
 
-            <Text style={styles.memberBadgeText}>
-              Smart Route Member
-            </Text>
+            <Text style={styles.memberBadgeText}>Smart Route Member</Text>
           </View>
         </View>
 
-        <Pressable
-          style={styles.editButton}
-          onPress={onEdit}
-        >
-          <Icon
-            name="create-outline"
-            size={18}
-            color="#2563EB"
-          />
+        <Pressable style={styles.editButton} onPress={onEdit}>
+          <Icon name="create-outline" size={18} color="#2563EB" />
         </Pressable>
       </View>
 
       <View style={styles.profileDivider} />
 
       <View style={styles.profileStats}>
-        <ProfileStat
-          icon="navigate"
-          value="128"
-          label="Trips"
-        />
+        <ProfileStat icon="navigate" value="128" label="Trips" />
 
-        <ProfileStat
-          icon="map"
-          value="2,486"
-          label="KM Travelled"
-        />
+        <ProfileStat icon="map" value="2,486" label="KM Travelled" />
 
-        <ProfileStat
-          icon="leaf"
-          value="18.4"
-          label="KG CO₂ Saved"
-        />
+        <ProfileStat icon="leaf" value="18.4" label="KG CO₂ Saved" />
       </View>
     </View>
   );
@@ -140,20 +85,12 @@ function ProfileStat({ icon, value, label }) {
   return (
     <View style={styles.profileStat}>
       <View style={styles.profileStatIcon}>
-        <Icon
-          name={icon}
-          size={17}
-          color="#2563EB"
-        />
+        <Icon name={icon} size={17} color="#2563EB" />
       </View>
 
-      <Text style={styles.profileStatValue}>
-        {value}
-      </Text>
+      <Text style={styles.profileStatValue}>{value}</Text>
 
-      <Text style={styles.profileStatLabel}>
-        {label}
-      </Text>
+      <Text style={styles.profileStatLabel}>{label}</Text>
     </View>
   );
 }
@@ -162,42 +99,26 @@ function ProfileStat({ icon, value, label }) {
    COMPLETE PROFILE CARD
 ============================================================ */
 
-function CompleteProfileCard({
-  dark,
-  percentage,
-  onPress,
-}) {
+function CompleteProfileCard({ dark, percentage, onPress }) {
   return (
     <Pressable
-      style={[
-        styles.completeProfileCard,
-        dark && styles.darkSurface,
-      ]}
+      style={[styles.completeProfileCard, dark && styles.darkSurface]}
       onPress={onPress}
     >
       <View style={styles.completeProfileTop}>
         <View style={styles.completeProfileIcon}>
-          <Icon
-            name="person-circle-outline"
-            size={25}
-            color="#2563EB"
-          />
+          <Icon name="person-circle-outline" size={25} color="#2563EB" />
         </View>
 
         <View style={styles.completeProfileContent}>
           <View style={styles.completeProfileTitleRow}>
             <Text
-              style={[
-                styles.completeProfileTitle,
-                dark && styles.darkText,
-              ]}
+              style={[styles.completeProfileTitle, dark && styles.darkText]}
             >
               Complete Your Profile
             </Text>
 
-            <Text style={styles.progressText}>
-              {percentage}%
-            </Text>
+            <Text style={styles.progressText}>{percentage}%</Text>
           </View>
 
           <Text
@@ -206,36 +127,23 @@ function CompleteProfileCard({
               dark && styles.darkMutedText,
             ]}
           >
-            Add your details for a safer journey
-            experience.
+            Add your details for a safer journey experience.
           </Text>
         </View>
 
-        <Icon
-          name="chevron-forward"
-          size={19}
-          color="#94A3B8"
-        />
+        <Icon name="chevron-forward" size={19} color="#94A3B8" />
       </View>
 
       <View style={styles.progressTrack}>
-        <View
-          style={[
-            styles.progressFill,
-            { width: `${percentage}%` },
-          ]}
-        />
+        <View style={[styles.progressFill, { width: `${percentage}%` }]} />
       </View>
 
       {percentage < 100 ? (
         <Text style={styles.completeHint}>
-          Complete your profile to improve
-          emergency assistance.
+          Complete your profile to improve emergency assistance.
         </Text>
       ) : (
-        <Text style={styles.completedHint}>
-          Your profile is complete.
-        </Text>
+        <Text style={styles.completedHint}>Your profile is complete.</Text>
       )}
     </Pressable>
   );
@@ -245,90 +153,42 @@ function CompleteProfileCard({
    VEHICLE CARD
 ============================================================ */
 
-function VehicleProfileCard({
-  dark,
-  vehicle,
-  onChange,
-}) {
+function VehicleProfileCard({ dark, vehicle, onChange }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
         <View>
-          <Text
-            style={[
-              styles.sectionTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.sectionTitle, dark && styles.darkText]}>
             Travel Profile
           </Text>
 
-          <Text
-            style={[
-              styles.sectionSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.sectionSubtitle, dark && styles.darkMutedText]}>
             Used for route recommendations
           </Text>
         </View>
 
         <View style={styles.sectionIcon}>
-          <Icon
-            name="analytics"
-            size={18}
-            color="#2563EB"
-          />
+          <Icon name="analytics" size={18} color="#2563EB" />
         </View>
       </View>
 
-      <View
-        style={[
-          styles.vehicleProfile,
-          dark && styles.darkInnerSurface,
-        ]}
-      >
+      <View style={[styles.vehicleProfile, dark && styles.darkInnerSurface]}>
         <View style={styles.vehicleLargeIcon}>
-          <Icon
-            name={vehicleIcon(vehicle)}
-            size={27}
-            color="#2563EB"
-          />
+          <Icon name={vehicleIcon(vehicle)} size={27} color="#2563EB" />
         </View>
 
         <View style={{ flex: 1 }}>
-          <Text
-            style={[
-              styles.vehicleTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.vehicleTitle, dark && styles.darkText]}>
             {vehicle}
           </Text>
 
-          <Text
-            style={[
-              styles.vehicleSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
-            Route scoring is optimized for your
-            vehicle type.
+          <Text style={[styles.vehicleSubtitle, dark && styles.darkMutedText]}>
+            Route scoring is optimized for your vehicle type.
           </Text>
         </View>
 
-        <Pressable
-          style={styles.changeButton}
-          onPress={onChange}
-        >
-          <Text style={styles.changeText}>
-            Change
-          </Text>
+        <Pressable style={styles.changeButton} onPress={onChange}>
+          <Text style={styles.changeText}>Change</Text>
         </Pressable>
       </View>
     </View>
@@ -353,11 +213,7 @@ function vehicleIcon(vehicle) {
    SMART PREFERENCES
 ============================================================ */
 
-function SmartPreferences({
-  dark,
-  preferences,
-  setPreferences,
-}) {
+function SmartPreferences({ dark, preferences, setPreferences }) {
   const update = (key, value) => {
     setPreferences((previous) => ({
       ...previous,
@@ -366,39 +222,20 @@ function SmartPreferences({
   };
 
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
         <View>
-          <Text
-            style={[
-              styles.sectionTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.sectionTitle, dark && styles.darkText]}>
             Smart Preferences
           </Text>
 
-          <Text
-            style={[
-              styles.sectionSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.sectionSubtitle, dark && styles.darkMutedText]}>
             Personalize route recommendations
           </Text>
         </View>
 
         <View style={styles.sectionIcon}>
-          <Icon
-            name="sparkles"
-            size={18}
-            color="#2563EB"
-          />
+          <Icon name="sparkles" size={18} color="#2563EB" />
         </View>
       </View>
 
@@ -408,9 +245,7 @@ function SmartPreferences({
         title="Prioritize Safety"
         subtitle="Prefer safer roads over small time savings"
         value={preferences.safety}
-        onChange={(value) =>
-          update("safety", value)
-        }
+        onChange={(value) => update("safety", value)}
       />
 
       <PreferenceSwitch
@@ -419,9 +254,7 @@ function SmartPreferences({
         title="Avoid Toll Roads"
         subtitle="Reduce toll expenses where possible"
         value={preferences.tolls}
-        onChange={(value) =>
-          update("tolls", value)
-        }
+        onChange={(value) => update("tolls", value)}
       />
 
       <PreferenceSwitch
@@ -430,9 +263,7 @@ function SmartPreferences({
         title="Avoid Flood Areas"
         subtitle="Avoid roads with higher waterlogging risk"
         value={preferences.flood}
-        onChange={(value) =>
-          update("flood", value)
-        }
+        onChange={(value) => update("flood", value)}
       />
 
       <PreferenceSwitch
@@ -441,9 +272,7 @@ function SmartPreferences({
         title="Avoid Heavy Traffic"
         subtitle="Prefer smoother traffic conditions"
         value={preferences.traffic}
-        onChange={(value) =>
-          update("traffic", value)
-        }
+        onChange={(value) => update("traffic", value)}
       />
 
       <PreferenceSwitch
@@ -452,48 +281,25 @@ function SmartPreferences({
         title="Minimize CO₂"
         subtitle="Prefer routes with lower emissions"
         value={preferences.co2}
-        onChange={(value) =>
-          update("co2", value)
-        }
+        onChange={(value) => update("co2", value)}
       />
     </View>
   );
 }
 
-function PreferenceSwitch({
-  dark,
-  icon,
-  title,
-  subtitle,
-  value,
-  onChange,
-}) {
+function PreferenceSwitch({ dark, icon, title, subtitle, value, onChange }) {
   return (
     <View style={styles.switchRow}>
       <View style={styles.switchIcon}>
-        <Icon
-          name={icon}
-          size={18}
-          color="#2563EB"
-        />
+        <Icon name={icon} size={18} color="#2563EB" />
       </View>
 
       <View style={styles.switchContent}>
-        <Text
-          style={[
-            styles.switchTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.switchTitle, dark && styles.darkText]}>
           {title}
         </Text>
 
-        <Text
-          style={[
-            styles.switchSubtitle,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.switchSubtitle, dark && styles.darkMutedText]}>
           {subtitle}
         </Text>
       </View>
@@ -505,9 +311,7 @@ function PreferenceSwitch({
           false: "#CBD5E1",
           true: "#93C5FD",
         }}
-        thumbColor={
-          value ? "#2563EB" : "#F8FAFC"
-        }
+        thumbColor={value ? "#2563EB" : "#F8FAFC"}
       />
     </View>
   );
@@ -519,38 +323,19 @@ function PreferenceSwitch({
 
 function SavedPlaces({ dark, onPress }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
         <View>
-          <Text
-            style={[
-              styles.sectionTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.sectionTitle, dark && styles.darkText]}>
             Saved Places
           </Text>
 
-          <Text
-            style={[
-              styles.sectionSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.sectionSubtitle, dark && styles.darkMutedText]}>
             Quickly navigate to your favorites
           </Text>
         </View>
 
-        <Icon
-          name="bookmark"
-          size={20}
-          color="#2563EB"
-        />
+        <Icon name="bookmark" size={20} color="#2563EB" />
       </View>
 
       <SavedPlace
@@ -580,51 +365,24 @@ function SavedPlaces({ dark, onPress }) {
   );
 }
 
-function SavedPlace({
-  dark,
-  icon,
-  title,
-  address,
-  onPress,
-}) {
+function SavedPlace({ dark, icon, title, address, onPress }) {
   return (
-    <Pressable
-      style={styles.savedPlaceRow}
-      onPress={onPress}
-    >
+    <Pressable style={styles.savedPlaceRow} onPress={onPress}>
       <View style={styles.savedPlaceIcon}>
-        <Icon
-          name={icon}
-          size={19}
-          color="#2563EB"
-        />
+        <Icon name={icon} size={19} color="#2563EB" />
       </View>
 
       <View style={{ flex: 1 }}>
-        <Text
-          style={[
-            styles.savedPlaceTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.savedPlaceTitle, dark && styles.darkText]}>
           {title}
         </Text>
 
-        <Text
-          style={[
-            styles.savedPlaceAddress,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.savedPlaceAddress, dark && styles.darkMutedText]}>
           {address}
         </Text>
       </View>
 
-      <Icon
-        name="chevron-forward"
-        color="#94A3B8"
-        size={18}
-      />
+      <Icon name="chevron-forward" color="#94A3B8" size={18} />
     </Pressable>
   );
 }
@@ -633,30 +391,15 @@ function SavedPlace({
    ACCOUNT
 ============================================================ */
 
-function AccountSection({
-  dark,
-  onEditProfile,
-  onNotifications,
-  onPrivacy,
-}) {
+function AccountSection({ dark, onEditProfile, onNotifications, onPrivacy }) {
   return (
     <>
       <View style={styles.sectionHeading}>
-        <Text
-          style={[
-            styles.headingTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.headingTitle, dark && styles.darkText]}>
           Account
         </Text>
 
-        <Text
-          style={[
-            styles.headingSubtitle,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.headingSubtitle, dark && styles.darkMutedText]}>
           Manage your Smart Route account
         </Text>
       </View>
@@ -691,12 +434,7 @@ function AccountSection({
           icon="language-outline"
           title="Language"
           subtitle="English"
-          onPress={() =>
-            Alert.alert(
-              "Language",
-              "Language selection opened."
-            )
-          }
+          onPress={() => Alert.alert("Language", "Language selection opened.")}
         />
 
         <PreferenceCard
@@ -705,10 +443,7 @@ function AccountSection({
           title="Help & Support"
           subtitle="Get help with Smart Route"
           onPress={() =>
-            Alert.alert(
-              "Help & Support",
-              "Support center opened."
-            )
+            Alert.alert("Help & Support", "Support center opened.")
           }
         />
       </View>
@@ -716,54 +451,27 @@ function AccountSection({
   );
 }
 
-function PreferenceCard({
-  dark,
-  icon,
-  title,
-  subtitle,
-  onPress,
-}) {
+function PreferenceCard({ dark, icon, title, subtitle, onPress }) {
   return (
     <Pressable
-      style={[
-        styles.preferenceCard,
-        dark && styles.darkSurface,
-      ]}
+      style={[styles.preferenceCard, dark && styles.darkSurface]}
       onPress={onPress}
     >
       <View style={styles.preferenceIcon}>
-        <Icon
-          name={icon}
-          size={20}
-          color="#2563EB"
-        />
+        <Icon name={icon} size={20} color="#2563EB" />
       </View>
 
       <View style={styles.preferenceContent}>
-        <Text
-          style={[
-            styles.preferenceTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.preferenceTitle, dark && styles.darkText]}>
           {title}
         </Text>
 
-        <Text
-          style={[
-            styles.preferenceSubtitle,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.preferenceSubtitle, dark && styles.darkMutedText]}>
           {subtitle}
         </Text>
       </View>
 
-      <Icon
-        name="chevron-forward"
-        size={19}
-        color="#94A3B8"
-      />
+      <Icon name="chevron-forward" size={19} color="#94A3B8" />
     </Pressable>
   );
 }
@@ -772,71 +480,32 @@ function PreferenceCard({
    EMERGENCY CONTACTS
 ============================================================ */
 
-function EmergencyContacts({
-  dark,
-  contacts,
-  onAdd,
-  onEdit,
-  onDelete,
-}) {
+function EmergencyContacts({ dark, contacts, onAdd, onEdit, onDelete }) {
   return (
-    <View
-      style={[
-        styles.sectionCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.sectionCard, dark && styles.darkSurface]}>
       <View style={styles.sectionHeader}>
         <View style={{ flex: 1 }}>
-          <Text
-            style={[
-              styles.sectionTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.sectionTitle, dark && styles.darkText]}>
             Emergency Contacts
           </Text>
 
-          <Text
-            style={[
-              styles.sectionSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.sectionSubtitle, dark && styles.darkMutedText]}>
             Add up to 4 people for emergency help
           </Text>
         </View>
 
         <View style={styles.emergencyHeaderIcon}>
-          <Icon
-            name="call"
-            size={18}
-            color="#DC2626"
-          />
+          <Icon name="call" size={18} color="#DC2626" />
         </View>
       </View>
 
       {contacts.length === 0 ? (
-        <View
-          style={[
-            styles.emptyEmergency,
-            dark && styles.darkInnerSurface,
-          ]}
-        >
+        <View style={[styles.emptyEmergency, dark && styles.darkInnerSurface]}>
           <View style={styles.emptyEmergencyIcon}>
-            <Icon
-              name="people-outline"
-              size={24}
-              color="#2563EB"
-            />
+            <Icon name="people-outline" size={24} color="#2563EB" />
           </View>
 
-          <Text
-            style={[
-              styles.emptyEmergencyTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.emptyEmergencyTitle, dark && styles.darkText]}>
             No emergency contact added
           </Text>
 
@@ -846,8 +515,7 @@ function EmergencyContacts({
               dark && styles.darkMutedText,
             ]}
           >
-            Add trusted people who can be contacted
-            during an emergency.
+            Add trusted people who can be contacted during an emergency.
           </Text>
         </View>
       ) : (
@@ -864,48 +532,23 @@ function EmergencyContacts({
       )}
 
       {contacts.length < 4 && (
-        <Pressable
-          style={styles.addEmergencyButton}
-          onPress={onAdd}
-        >
-          <Icon
-            name="add"
-            size={20}
-            color="#2563EB"
-          />
+        <Pressable style={styles.addEmergencyButton} onPress={onAdd}>
+          <Icon name="add" size={20} color="#2563EB" />
 
-          <Text style={styles.addEmergencyText}>
-            Add Emergency Contact
-          </Text>
+          <Text style={styles.addEmergencyText}>Add Emergency Contact</Text>
         </Pressable>
       )}
 
-      <Text
-        style={[
-          styles.contactCount,
-          dark && styles.darkMutedText,
-        ]}
-      >
+      <Text style={[styles.contactCount, dark && styles.darkMutedText]}>
         {contacts.length}/4 contacts added
       </Text>
     </View>
   );
 }
 
-function EmergencyContactRow({
-  dark,
-  contact,
-  index,
-  onEdit,
-  onDelete,
-}) {
+function EmergencyContactRow({ dark, contact, index, onEdit, onDelete }) {
   return (
-    <View
-      style={[
-        styles.emergencyContactRow,
-        dark && styles.darkInnerSurface,
-      ]}
-    >
+    <View style={[styles.emergencyContactRow, dark && styles.darkInnerSurface]}>
       <View style={styles.emergencyAvatar}>
         <Text style={styles.emergencyAvatarText}>
           {getInitials(contact.name)}
@@ -914,12 +557,7 @@ function EmergencyContactRow({
 
       <View style={styles.emergencyContactInfo}>
         <View style={styles.contactNameRow}>
-          <Text
-            style={[
-              styles.emergencyContactName,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.emergencyContactName, dark && styles.darkText]}>
             {contact.name}
           </Text>
 
@@ -931,43 +569,24 @@ function EmergencyContactRow({
         </View>
 
         <Text
-          style={[
-            styles.emergencyContactPhone,
-            dark && styles.darkMutedText,
-          ]}
+          style={[styles.emergencyContactPhone, dark && styles.darkMutedText]}
         >
           {contact.phone}
         </Text>
 
-        <Text style={styles.contactNumber}>
-          Emergency Contact {index + 1}
-        </Text>
+        <Text style={styles.contactNumber}>Emergency Contact {index + 1}</Text>
       </View>
 
       <View style={styles.contactActions}>
-        <Pressable
-          style={styles.smallActionButton}
-          onPress={onEdit}
-        >
-          <Icon
-            name="create-outline"
-            size={17}
-            color="#2563EB"
-          />
+        <Pressable style={styles.smallActionButton} onPress={onEdit}>
+          <Icon name="create-outline" size={17} color="#2563EB" />
         </Pressable>
 
         <Pressable
-          style={[
-            styles.smallActionButton,
-            styles.deleteActionButton,
-          ]}
+          style={[styles.smallActionButton, styles.deleteActionButton]}
           onPress={onDelete}
         >
-          <Icon
-            name="trash-outline"
-            size={17}
-            color="#DC2626"
-          />
+          <Icon name="trash-outline" size={17} color="#DC2626" />
         </Pressable>
       </View>
     </View>
@@ -983,9 +602,7 @@ function getInitials(name) {
     return parts[0].slice(0, 2).toUpperCase();
   }
 
-  return (
-    parts[0][0] + parts[parts.length - 1][0]
-  ).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 /* ============================================================
@@ -994,44 +611,22 @@ function getInitials(name) {
 
 function AboutCard({ dark }) {
   return (
-    <View
-      style={[
-        styles.aboutCard,
-        dark && styles.darkSurface,
-      ]}
-    >
+    <View style={[styles.aboutCard, dark && styles.darkSurface]}>
       <View style={styles.aboutIcon}>
-        <Icon
-          name="sparkles"
-          size={20}
-          color="#2563EB"
-        />
+        <Icon name="sparkles" size={20} color="#2563EB" />
       </View>
 
       <View style={{ flex: 1 }}>
-        <Text
-          style={[
-            styles.aboutTitle,
-            dark && styles.darkText,
-          ]}
-        >
+        <Text style={[styles.aboutTitle, dark && styles.darkText]}>
           Smart Route
         </Text>
 
-        <Text
-          style={[
-            styles.aboutText,
-            dark && styles.darkMutedText,
-          ]}
-        >
-          Intelligent route recommendations based
-          on safety, traffic, weather and road
-          conditions.
+        <Text style={[styles.aboutText, dark && styles.darkMutedText]}>
+          Intelligent route recommendations based on safety, traffic, weather
+          and road conditions.
         </Text>
 
-        <Text style={styles.versionText}>
-          Version 1.0.0
-        </Text>
+        <Text style={styles.versionText}>Version 1.0.0</Text>
       </View>
     </View>
   );
@@ -1041,23 +636,13 @@ function AboutCard({ dark }) {
    COMPLETE PROFILE MODAL
 ============================================================ */
 
-function CompleteProfileModal({
-  visible,
-  dark,
-  profile,
-  onSave,
-  onClose,
-}) {
+function CompleteProfileModal({ visible, dark, profile, onSave, onClose }) {
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
   const [phone, setPhone] = useState(profile.phone);
   const [dob, setDob] = useState(profile.dob);
-  const [bloodGroup, setBloodGroup] = useState(
-    profile.bloodGroup
-  );
-  const [address, setAddress] = useState(
-    profile.address
-  );
+  const [bloodGroup, setBloodGroup] = useState(profile.bloodGroup);
+  const [address, setAddress] = useState(profile.address);
 
   React.useEffect(() => {
     if (visible) {
@@ -1072,18 +657,12 @@ function CompleteProfileModal({
 
   const save = () => {
     if (!name.trim()) {
-      Alert.alert(
-        "Name required",
-        "Please enter your full name."
-      );
+      Alert.alert("Name required", "Please enter your full name.");
       return;
     }
 
     if (!phone.trim()) {
-      Alert.alert(
-        "Phone required",
-        "Please enter your phone number."
-      );
+      Alert.alert("Phone required", "Please enter your phone number.");
       return;
     }
 
@@ -1107,30 +686,17 @@ function CompleteProfileModal({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <View
-          style={[
-            styles.largeEditSheet,
-            dark && styles.darkSurface,
-          ]}
-        >
+        <View style={[styles.largeEditSheet, dark && styles.darkSurface]}>
           <View style={styles.sheetHandle} />
 
           <View style={styles.sheetHeader}>
             <View>
-              <Text
-                style={[
-                  styles.sheetTitle,
-                  dark && styles.darkText,
-                ]}
-              >
+              <Text style={[styles.sheetTitle, dark && styles.darkText]}>
                 Complete Profile
               </Text>
 
               <Text
-                style={[
-                  styles.sheetSubtitle,
-                  dark && styles.darkMutedText,
-                ]}
+                style={[styles.sheetSubtitle, dark && styles.darkMutedText]}
               >
                 Keep your information updated
               </Text>
@@ -1140,9 +706,7 @@ function CompleteProfileModal({
               <Icon
                 name="close"
                 size={24}
-                color={
-                  dark ? "#F8FAFC" : "#0F172A"
-                }
+                color={dark ? "#F8FAFC" : "#0F172A"}
               />
             </Pressable>
           </View>
@@ -1208,19 +772,10 @@ function CompleteProfileModal({
               multiline
             />
 
-            <Pressable
-              style={styles.saveButton}
-              onPress={save}
-            >
-              <Icon
-                name="checkmark"
-                color="#FFFFFF"
-                size={20}
-              />
+            <Pressable style={styles.saveButton} onPress={save}>
+              <Icon name="checkmark" color="#FFFFFF" size={20} />
 
-              <Text style={styles.saveButtonText}>
-                Save Profile
-              </Text>
+              <Text style={styles.saveButtonText}>Save Profile</Text>
             </Pressable>
 
             <View style={{ height: 25 }} />
@@ -1243,12 +798,7 @@ function ProfileInput({
 }) {
   return (
     <View>
-      <Text
-        style={[
-          styles.inputLabel,
-          dark && styles.darkMutedText,
-        ]}
-      >
+      <Text style={[styles.inputLabel, dark && styles.darkMutedText]}>
         {label}
       </Text>
 
@@ -1259,20 +809,14 @@ function ProfileInput({
           dark && styles.darkInput,
         ]}
       >
-        <Icon
-          name={icon}
-          color="#64748B"
-          size={19}
-        />
+        <Icon name={icon} color="#64748B" size={19} />
 
         <TextInput
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
           multiline={multiline}
-          textAlignVertical={
-            multiline ? "top" : "center"
-          }
+          textAlignVertical={multiline ? "top" : "center"}
           style={[
             styles.input,
             multiline && styles.multilineInput,
@@ -1290,13 +834,7 @@ function ProfileInput({
    EMERGENCY CONTACT MODAL
 ============================================================ */
 
-function EmergencyContactModal({
-  visible,
-  dark,
-  contact,
-  onSave,
-  onClose,
-}) {
+function EmergencyContactModal({ visible, dark, contact, onSave, onClose }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [relation, setRelation] = useState("");
@@ -1311,18 +849,12 @@ function EmergencyContactModal({
 
   const save = () => {
     if (!name.trim()) {
-      Alert.alert(
-        "Name required",
-        "Please enter emergency contact name."
-      );
+      Alert.alert("Name required", "Please enter emergency contact name.");
       return;
     }
 
     if (!phone.trim()) {
-      Alert.alert(
-        "Phone required",
-        "Please enter emergency contact number."
-      );
+      Alert.alert("Phone required", "Please enter emergency contact number.");
       return;
     }
 
@@ -1344,35 +876,19 @@ function EmergencyContactModal({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <View
-          style={[
-            styles.editSheet,
-            dark && styles.darkSurface,
-          ]}
-        >
+        <View style={[styles.editSheet, dark && styles.darkSurface]}>
           <View style={styles.sheetHandle} />
 
           <View style={styles.sheetHeader}>
             <View>
-              <Text
-                style={[
-                  styles.sheetTitle,
-                  dark && styles.darkText,
-                ]}
-              >
-                {contact
-                  ? "Edit Contact"
-                  : "Add Emergency Contact"}
+              <Text style={[styles.sheetTitle, dark && styles.darkText]}>
+                {contact ? "Edit Contact" : "Add Emergency Contact"}
               </Text>
 
               <Text
-                style={[
-                  styles.sheetSubtitle,
-                  dark && styles.darkMutedText,
-                ]}
+                style={[styles.sheetSubtitle, dark && styles.darkMutedText]}
               >
-                This person can help during an
-                emergency.
+                This person can help during an emergency.
               </Text>
             </View>
 
@@ -1380,9 +896,7 @@ function EmergencyContactModal({
               <Icon
                 name="close"
                 size={24}
-                color={
-                  dark ? "#F8FAFC" : "#0F172A"
-                }
+                color={dark ? "#F8FAFC" : "#0F172A"}
               />
             </Pressable>
           </View>
@@ -1415,20 +929,11 @@ function EmergencyContactModal({
             placeholder="Example: Brother, Father, Friend"
           />
 
-          <Pressable
-            style={styles.saveButton}
-            onPress={save}
-          >
-            <Icon
-              name="checkmark"
-              color="#FFFFFF"
-              size={20}
-            />
+          <Pressable style={styles.saveButton} onPress={save}>
+            <Icon name="checkmark" color="#FFFFFF" size={20} />
 
             <Text style={styles.saveButtonText}>
-              {contact
-                ? "Update Contact"
-                : "Save Contact"}
+              {contact ? "Update Contact" : "Save Contact"}
             </Text>
           </Pressable>
         </View>
@@ -1445,30 +950,23 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const systemTheme = useColorScheme();
 
-  const [dark, setDark] = useState(
-    systemTheme === "dark"
-  );
+  const [dark, setDark] = useState(systemTheme === "dark");
 
-  const [completeProfileModal, setCompleteProfileModal] =
-    useState(false);
+  const [completeProfileModal, setCompleteProfileModal] = useState(false);
 
-  const [contactModal, setContactModal] =
-    useState(false);
+  const [contactModal, setContactModal] = useState(false);
 
-  const [editingContact, setEditingContact] =
-    useState(null);
+  const [editingContact, setEditingContact] = useState(null);
 
-  const [vehicle, setVehicle] =
-    useState("Car");
+  const [vehicle, setVehicle] = useState("Car");
 
-  const [preferences, setPreferences] =
-    useState({
-      safety: true,
-      tolls: true,
-      flood: true,
-      traffic: false,
-      co2: false,
-    });
+  const [preferences, setPreferences] = useState({
+    safety: true,
+    tolls: true,
+    flood: true,
+    traffic: false,
+    co2: false,
+  });
 
   const [profile, setProfile] = useState({
     name: "Shashi Kumar",
@@ -1479,8 +977,7 @@ export default function ProfileScreen() {
     address: "",
   });
 
-  const [emergencyContacts, setEmergencyContacts] =
-    useState([]);
+  const [emergencyContacts, setEmergencyContacts] = useState([]);
 
   /* ==========================================================
      PROFILE COMPLETION
@@ -1496,13 +993,9 @@ export default function ProfileScreen() {
       profile.address,
     ];
 
-    const completed = fields.filter(
-      (item) => item && item.trim()
-    ).length;
+    const completed = fields.filter((item) => item && item.trim()).length;
 
-    return Math.round(
-      (completed / fields.length) * 100
-    );
+    return Math.round((completed / fields.length) * 100);
   }, [profile]);
 
   /* ==========================================================
@@ -1512,10 +1005,7 @@ export default function ProfileScreen() {
   const handleSaveProfile = (updatedProfile) => {
     setProfile(updatedProfile);
 
-    Alert.alert(
-      "Profile updated",
-      "Your profile information has been saved."
-    );
+    Alert.alert("Profile updated", "Your profile information has been saved.");
   };
 
   /* ==========================================================
@@ -1526,7 +1016,7 @@ export default function ProfileScreen() {
     if (emergencyContacts.length >= 4) {
       Alert.alert(
         "Maximum contacts reached",
-        "You can add maximum 4 emergency contacts."
+        "You can add maximum 4 emergency contacts.",
       );
       return;
     }
@@ -1542,15 +1032,11 @@ export default function ProfileScreen() {
 
   const saveEmergencyContact = (contact) => {
     setEmergencyContacts((previous) => {
-      const exists = previous.some(
-        (item) => item.id === contact.id
-      );
+      const exists = previous.some((item) => item.id === contact.id);
 
       if (exists) {
         return previous.map((item) =>
-          item.id === contact.id
-            ? contact
-            : item
+          item.id === contact.id ? contact : item,
         );
       }
 
@@ -1559,7 +1045,7 @@ export default function ProfileScreen() {
 
     Alert.alert(
       "Contact saved",
-      "Emergency contact has been saved successfully."
+      "Emergency contact has been saved successfully.",
     );
   };
 
@@ -1577,13 +1063,11 @@ export default function ProfileScreen() {
           style: "destructive",
           onPress: () => {
             setEmergencyContacts((previous) =>
-              previous.filter(
-                (item) => item.id !== id
-              )
+              previous.filter((item) => item.id !== id),
             );
           },
         },
-      ]
+      ],
     );
   };
 
@@ -1592,39 +1076,35 @@ export default function ProfileScreen() {
   ========================================================== */
 
   const handleLogout = () => {
-    Alert.alert(
-      "Log out",
-      "Are you sure you want to log out?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Log out",
-          style: "destructive",
-          onPress: () => {
-            /*
-             * Reset navigation stack so user cannot
-             * press back and return to Profile.
-             *
-             * IMPORTANT:
-             * "Login" must match your navigator's
-             * login screen name.
-             */
+    Alert.alert("Log out", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Log out",
+        style: "destructive",
+        onPress: () => {
+          /*
+           * Reset navigation stack so user cannot
+           * press back and return to Profile.
+           *
+           * IMPORTANT:
+           * "Login" must match your navigator's
+           * login screen name.
+           */
 
-            navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: "login",
-                },
-              ],
-            });
-          },
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: "login",
+              },
+            ],
+          });
         },
-      ]
-    );
+      },
+    ]);
   };
 
   /* ==========================================================
@@ -1642,14 +1122,9 @@ export default function ProfileScreen() {
       "Walking",
     ];
 
-    const currentIndex =
-      vehicles.indexOf(vehicle);
+    const currentIndex = vehicles.indexOf(vehicle);
 
-    const nextVehicle =
-      vehicles[
-        (currentIndex + 1) %
-          vehicles.length
-      ];
+    const nextVehicle = vehicles[(currentIndex + 1) % vehicles.length];
 
     setVehicle(nextVehicle);
   };
@@ -1659,43 +1134,22 @@ export default function ProfileScreen() {
   ========================================================== */
 
   const showComingSoon = (title) => {
-    Alert.alert(
-      title,
-      `${title} settings opened.`
-    );
+    Alert.alert(title, `${title} settings opened.`);
   };
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        dark && styles.darkBackground,
-      ]}
-    >
-      <StatusBar
-        barStyle={
-          dark
-            ? "light-content"
-            : "dark-content"
-        }
-      />
+    <SafeAreaView style={[styles.container, dark && styles.darkBackground]}>
+      <StatusBar barStyle={dark ? "light-content" : "dark-content"} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={
-          styles.scrollContent
-        }
+        contentContainerStyle={styles.scrollContent}
       >
         {/* ====================================================
             PROFILE
         ==================================================== */}
 
-        <ProfileCard
-          dark={dark}
-          onEdit={() =>
-            setCompleteProfileModal(true)
-          }
-        />
+        <ProfileCard dark={dark} onEdit={() => setCompleteProfileModal(true)} />
 
         {/* ====================================================
             COMPLETE PROFILE
@@ -1704,9 +1158,7 @@ export default function ProfileScreen() {
         <CompleteProfileCard
           dark={dark}
           percentage={profilePercentage}
-          onPress={() =>
-            setCompleteProfileModal(true)
-          }
+          onPress={() => setCompleteProfileModal(true)}
         />
 
         {/* ====================================================
@@ -1714,21 +1166,11 @@ export default function ProfileScreen() {
         ==================================================== */}
 
         <View style={styles.sectionHeading}>
-          <Text
-            style={[
-              styles.headingTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.headingTitle, dark && styles.darkText]}>
             Your Driving Profile
           </Text>
 
-          <Text
-            style={[
-              styles.headingSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.headingSubtitle, dark && styles.darkMutedText]}>
             Personalized route intelligence
           </Text>
         </View>
@@ -1754,21 +1196,11 @@ export default function ProfileScreen() {
         ==================================================== */}
 
         <View style={styles.sectionHeading}>
-          <Text
-            style={[
-              styles.headingTitle,
-              dark && styles.darkText,
-            ]}
-          >
+          <Text style={[styles.headingTitle, dark && styles.darkText]}>
             Safety
           </Text>
 
-          <Text
-            style={[
-              styles.headingSubtitle,
-              dark && styles.darkMutedText,
-            ]}
-          >
+          <Text style={[styles.headingSubtitle, dark && styles.darkMutedText]}>
             Keep trusted people ready for emergencies
           </Text>
         </View>
@@ -1787,9 +1219,7 @@ export default function ProfileScreen() {
 
         <SavedPlaces
           dark={dark}
-          onPress={() =>
-            showComingSoon("Saved Places")
-          }
+          onPress={() => showComingSoon("Saved Places")}
         />
 
         {/* ====================================================
@@ -1798,17 +1228,9 @@ export default function ProfileScreen() {
 
         <AccountSection
           dark={dark}
-          onEditProfile={() =>
-            setCompleteProfileModal(true)
-          }
-          onNotifications={() =>
-            showComingSoon("Notifications")
-          }
-          onPrivacy={() =>
-            showComingSoon(
-              "Privacy & Security"
-            )
-          }
+          onEditProfile={() => setCompleteProfileModal(true)}
+          onNotifications={() => showComingSoon("Notifications")}
+          onPrivacy={() => showComingSoon("Privacy & Security")}
         />
 
         {/* ====================================================
@@ -1822,29 +1244,15 @@ export default function ProfileScreen() {
         ==================================================== */}
 
         <Pressable
-          style={[
-            styles.logoutButton,
-            dark && styles.darkLogoutButton,
-          ]}
+          style={[styles.logoutButton, dark && styles.darkLogoutButton]}
           onPress={handleLogout}
         >
-          <Icon
-            name="log-out-outline"
-            color="#DC2626"
-            size={20}
-          />
+          <Icon name="log-out-outline" color="#DC2626" size={20} />
 
-          <Text style={styles.logoutText}>
-            Log Out
-          </Text>
+          <Text style={styles.logoutText}>Log Out</Text>
         </Pressable>
 
-        <Text
-          style={[
-            styles.footerText,
-            dark && styles.darkMutedText,
-          ]}
-        >
+        <Text style={[styles.footerText, dark && styles.darkMutedText]}>
           Smart Route • Made for safer journeys
         </Text>
 
@@ -1860,9 +1268,7 @@ export default function ProfileScreen() {
         dark={dark}
         profile={profile}
         onSave={handleSaveProfile}
-        onClose={() =>
-          setCompleteProfileModal(false)
-        }
+        onClose={() => setCompleteProfileModal(false)}
       />
 
       {/* ======================================================
@@ -2628,8 +2034,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     paddingHorizontal: 18,
     paddingTop: 10,
-    paddingBottom:
-      Platform.OS === "ios" ? 28 : 18,
+    paddingBottom: Platform.OS === "ios" ? 28 : 18,
     maxHeight: "88%",
   },
 
@@ -2639,8 +2044,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     paddingHorizontal: 18,
     paddingTop: 10,
-    paddingBottom:
-      Platform.OS === "ios" ? 28 : 18,
+    paddingBottom: Platform.OS === "ios" ? 28 : 18,
     maxHeight: "92%",
   },
 

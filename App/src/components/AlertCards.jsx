@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AlertCard from "./AlertCard";
 
-// const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
+const WEATHER_API = "https://api.open-meteo.com/v1/forecast";
 
 /*
   WMO Weather Codes
@@ -148,19 +148,15 @@ export default function AlertCards({
         get the device's current location.
       */
       if (lat == null || lon == null) {
-        const { status } =
-          await Location.requestForegroundPermissionsAsync();
+        const { status } = await Location.requestForegroundPermissionsAsync();
 
         if (status !== "granted") {
-          throw new Error(
-            "Location permission is required for live weather."
-          );
+          throw new Error("Location permission is required for live weather.");
         }
 
-        const location =
-          await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Balanced,
-          });
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
 
         lat = location.coords.latitude;
         lon = location.coords.longitude;
@@ -186,40 +182,31 @@ export default function AlertCards({
 
       const currentWeather = data.current || {};
 
-      const rainProbability =
-        data.hourly?.precipitation_probability?.[0] ?? 0;
+      const rainProbability = data.hourly?.precipitation_probability?.[0] ?? 0;
 
-      const weatherInfo = getWeatherInfo(
-        currentWeather.weather_code
-      );
+      const weatherInfo = getWeatherInfo(currentWeather.weather_code);
 
       const severity = getWeatherSeverity(
         rainProbability,
-        currentWeather.weather_code
+        currentWeather.weather_code,
       );
 
       setWeather({
-        temperature: Math.round(
-          currentWeather.temperature_2m ?? 0
-        ),
+        temperature: Math.round(currentWeather.temperature_2m ?? 0),
 
         apparentTemperature: Math.round(
-          currentWeather.apparent_temperature ?? 0
+          currentWeather.apparent_temperature ?? 0,
         ),
 
         rainProbability,
 
-        precipitation:
-          currentWeather.precipitation ?? 0,
+        precipitation: currentWeather.precipitation ?? 0,
 
-        humidity:
-          currentWeather.relative_humidity_2m ?? 0,
+        humidity: currentWeather.relative_humidity_2m ?? 0,
 
-        windSpeed:
-          currentWeather.wind_speed_10m ?? 0,
+        windSpeed: currentWeather.wind_speed_10m ?? 0,
 
-        weatherCode:
-          currentWeather.weather_code,
+        weatherCode: currentWeather.weather_code,
 
         weatherText: weatherInfo.text,
 
@@ -244,10 +231,7 @@ export default function AlertCards({
     /*
       Refresh weather every 15 minutes.
     */
-    const interval = setInterval(
-      fetchWeather,
-      15 * 60 * 1000
-    );
+    const interval = setInterval(fetchWeather, 15 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [fetchWeather]);
@@ -276,7 +260,7 @@ export default function AlertCards({
     }
 
     return `Humidity ${weather.humidity}% • Wind ${Math.round(
-      weather.windSpeed
+      weather.windSpeed,
     )} km/h`;
   };
 
@@ -288,10 +272,9 @@ export default function AlertCards({
 
   const riskLevel = riskData?.level || null;
 
-  const riskTitle =
-    riskLevel
-      ? `Risk Level: ${riskLevel}`
-      : "Risk data unavailable";
+  const riskTitle = riskLevel
+    ? `Risk Level: ${riskLevel}`
+    : "Risk data unavailable";
 
   const riskSubtitle =
     riskData?.affectedCorridors != null
@@ -299,9 +282,7 @@ export default function AlertCards({
       : "Connect your risk API";
 
   const riskType =
-    riskLevel === "High" || riskLevel === "Critical"
-      ? "danger"
-      : "success";
+    riskLevel === "High" || riskLevel === "Critical" ? "danger" : "success";
 
   /*
     -------------------------
@@ -309,47 +290,29 @@ export default function AlertCards({
     -------------------------
   */
 
-  const accessibilityStatus =
-    accessibilityData?.status || "Live";
+  const accessibilityStatus = accessibilityData?.status || "Live";
 
-  const accessibilityText =
-    accessibilityData?.message ||
-    "View NER Risk Map";
+  const accessibilityText = accessibilityData?.message || "View NER Risk Map";
 
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.row,
-          isSmallScreen && styles.smallRow,
-        ]}
-      >
+      <View style={[styles.row, isSmallScreen && styles.smallRow]}>
         {/* RISK CARD */}
 
         <AlertCard
           type={riskType}
           icon="warning"
           title={riskTitle}
-          mainText={
-            riskData?.level
-              ? riskData.level
-              : "No live risk data"
-          }
+          mainText={riskData?.level ? riskData.level : "No live risk data"}
           subtitle={riskSubtitle}
           index={0}
-          onPress={() =>
-            navigation?.navigate("Map")
-          }
+          onPress={() => navigation?.navigate("Map")}
         />
 
         {/* WEATHER CARD */}
 
         {loading ? (
-          <AlertCard
-            type="weather"
-            loading
-            index={1}
-          />
+          <AlertCard type="weather" loading index={1} />
         ) : error ? (
           <AlertCard
             type="weather"
@@ -362,11 +325,7 @@ export default function AlertCards({
           />
         ) : (
           <AlertCard
-            type={
-              weather?.severity === "High"
-                ? "danger"
-                : "weather"
-            }
+            type={weather?.severity === "High" ? "danger" : "weather"}
             icon={weather?.weatherIcon || "cloud"}
             title={`Weather • ${weather?.severity || "Low"} Risk`}
             mainText={getWeatherMainText()}
@@ -385,22 +344,15 @@ export default function AlertCards({
           mainText={accessibilityText}
           subtitle="Open live NER risk map"
           index={2}
-          onPress={() =>
-            navigation?.navigate("Map")
-          }
+          onPress={() => navigation?.navigate("Map")}
         />
       </View>
 
       {loading && (
         <View style={styles.statusRow}>
-          <ActivityIndicator
-            size="small"
-            color="#1769AA"
-          />
+          <ActivityIndicator size="small" color="#1769AA" />
 
-          <Text style={styles.statusText}>
-            Fetching live weather...
-          </Text>
+          <Text style={styles.statusText}>Fetching live weather...</Text>
         </View>
       )}
 

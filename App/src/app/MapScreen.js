@@ -1,575 +1,1110 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Modal,
-  Pressable,
   SafeAreaView,
-  ScrollView,
-  StyleSheet,
+  View,
   Text,
   TextInput,
-  View,
-  Alert,
+  Pressable,
+  StyleSheet,
+  Animated,
+  Platform,
+  ActivityIndicator,
 } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import { Ionicons } from "@expo/vector-icons";
 
-/* ============================================================
-   NORTH EAST DUMMY DATA
-============================================================ */
+import MapView, {
+  Marker,
+  Polyline,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 
-const NER_DUMMY_DATA = [
+import * as Location from "expo-location";
+
+/* =========================================================
+   SEVERITY
+========================================================= */
+
+const SEVERITY = {
+  INFO: "info",
+  WARNING: "warning",
+  DANGER: "danger",
+};
+
+/* =========================================================
+   DEFAULT LOCATION
+   Ranchi
+========================================================= */
+
+const DEFAULT_ORIGIN = {
+  latitude: 23.3441,
+  longitude: 85.3096,
+};
+
+/*
+  Demo destination.
+  Change this according to your actual destination.
+*/
+const DEFAULT_DESTINATION = {
+  latitude: 23.3727,
+  longitude: 85.3372,
+};
+
+/* =========================================================
+   MOCK ROUTES
+========================================================= */
+
+const MOCK_ROUTES = [
   {
-    id: "NER-TRK-001",
-    vehicleNumber: "AS01-TR-1024",
-    name: "Guwahati Cargo",
-    latitude: 26.1445,
-    longitude: 91.7362,
-    route: "Guwahati → Shillong",
-    state: "Assam",
-    status: "Moving",
+    id: "route-main",
+    name: "NH-6 Corridor",
+    label: "Best Overall",
+
+    coordinates: [
+      DEFAULT_ORIGIN,
+      { latitude: 26.1512, longitude: 91.7564 },
+      { latitude: 26.1258, longitude: 91.8125 },
+      { latitude: 25.9654, longitude: 91.8942 },
+      { latitude: 25.7801, longitude: 91.8765 },
+      DEFAULT_DESTINATION,
+    ],
+
+    distanceKm: 98.6,
+    etaMin: 168,
+
+    traffic: {
+      level: "moderate",
+      congestion: 43,
+      delayMin: 9,
+      speedKmh: 36,
+      incidents: 1,
+      closure: false,
+    },
+
+    road: {
+      quality: 87,
+      potholes: 2,
+      construction: 1,
+      closures: 0,
+      floodRisk: 24,
+      waterloggingRisk: 18,
+      narrowRoads: 1,
+      sharpTurns: 4,
+      steepSlopes: 2,
+      accidentProne: 14,
+      exposedSections: 3,
+    },
+
+    safety: 91,
+    toll: 0,
+    fuelLiters: 17.8,
+    fuelCost: 1585,
+    co2Kg: 41.2,
+    rainExposure: 31,
+    chargingStations: 4,
+
+    hazards: [
+      {
+        id: "ner-h1",
+        type: "waterlogging",
+        title: "Waterlogging risk",
+        description:
+          "Water accumulation may occur near low-lying sections during heavy rain.",
+        severity: SEVERITY.WARNING,
+        coordinate: {
+          latitude: 26.1258,
+          longitude: 91.8125,
+        },
+      },
+    ],
   },
+
   {
-    id: "NER-TRK-002",
-    vehicleNumber: "AS01-TR-2048",
-    name: "Kamrup Logistics",
-    latitude: 26.1158,
-    longitude: 91.7086,
-    route: "Guwahati → Siliguri",
-    state: "Assam",
-    status: "In Transit",
+    id: "route-highway",
+    name: "NH-27 Express Corridor",
+    label: "Fastest",
+
+    coordinates: [
+      DEFAULT_ORIGIN,
+      { latitude: 26.1388, longitude: 91.7485 },
+      { latitude: 26.1025, longitude: 91.7922 },
+      { latitude: 26.0342, longitude: 91.8415 },
+      { latitude: 25.8867, longitude: 91.9012 },
+      DEFAULT_DESTINATION,
+    ],
+
+    distanceKm: 94.2,
+    etaMin: 151,
+
+    traffic: {
+      level: "heavy",
+      congestion: 69,
+      delayMin: 18,
+      speedKmh: 39,
+      incidents: 2,
+      closure: false,
+    },
+
+    road: {
+      quality: 92,
+      potholes: 1,
+      construction: 2,
+      closures: 0,
+      floodRisk: 34,
+      waterloggingRisk: 29,
+      narrowRoads: 0,
+      sharpTurns: 2,
+      steepSlopes: 2,
+      accidentProne: 22,
+      exposedSections: 4,
+    },
+
+    safety: 82,
+    toll: 120,
+    fuelLiters: 17.1,
+    fuelCost: 1522,
+    co2Kg: 39.8,
+    rainExposure: 42,
+    chargingStations: 3,
+
+    hazards: [
+      {
+        id: "ner-h2",
+        type: "accident",
+        title: "Accident-prone section",
+        description:
+          "Traffic may slow down due to a reported accident-prone section.",
+        severity: SEVERITY.DANGER,
+        coordinate: {
+          latitude: 26.1025,
+          longitude: 91.7922,
+        },
+      },
+
+      {
+        id: "ner-h3",
+        type: "construction",
+        title: "Road construction",
+        description:
+          "Temporary lane restriction due to highway construction.",
+        severity: SEVERITY.WARNING,
+        coordinate: {
+          latitude: 26.0342,
+          longitude: 91.8415,
+        },
+      },
+    ],
   },
+
   {
-    id: "NER-TRK-003",
-    vehicleNumber: "ML05-TR-3312",
-    name: "Shillong Express",
-    latitude: 25.5788,
-    longitude: 91.8933,
-    route: "Shillong → Guwahati",
-    state: "Meghalaya",
-    status: "Moving",
+    id: "route-safe",
+    name: "Hill Safety Corridor",
+    label: "Safest",
+
+    coordinates: [
+      DEFAULT_ORIGIN,
+      { latitude: 26.1214, longitude: 91.7732 },
+      { latitude: 26.0628, longitude: 91.8351 },
+      { latitude: 25.9446, longitude: 91.8624 },
+      { latitude: 25.8042, longitude: 91.8918 },
+      DEFAULT_DESTINATION,
+    ],
+
+    distanceKm: 103.8,
+    etaMin: 179,
+
+    traffic: {
+      level: "light",
+      congestion: 18,
+      delayMin: 4,
+      speedKmh: 34,
+      incidents: 0,
+      closure: false,
+    },
+
+    road: {
+      quality: 94,
+      potholes: 0,
+      construction: 0,
+      closures: 0,
+      floodRisk: 9,
+      waterloggingRisk: 8,
+      narrowRoads: 1,
+      sharpTurns: 3,
+      steepSlopes: 3,
+      accidentProne: 5,
+      exposedSections: 1,
+    },
+
+    safety: 97,
+    toll: 0,
+    fuelLiters: 18.6,
+    fuelCost: 1655,
+    co2Kg: 43.1,
+    rainExposure: 16,
+    chargingStations: 5,
+
+    hazards: [],
   },
+
   {
-    id: "NER-TRK-004",
-    vehicleNumber: "TR01-TR-4589",
-    name: "Agartala Cargo",
-    latitude: 23.8315,
-    longitude: 91.2868,
-    route: "Agartala → Guwahati",
-    state: "Tripura",
-    status: "Moving",
-  },
-  {
-    id: "NER-TRK-005",
-    vehicleNumber: "MN01-TR-5621",
-    name: "Imphal Transport",
-    latitude: 24.817,
-    longitude: 93.9368,
-    route: "Imphal → Dimapur",
-    state: "Manipur",
-    status: "In Transit",
-  },
-  {
-    id: "NER-TRK-006",
-    vehicleNumber: "NL01-TR-6782",
-    name: "Dimapur Freight",
-    latitude: 25.5788,
-    longitude: 93.9368,
-    route: "Dimapur → Kohima",
-    state: "Nagaland",
-    status: "Moving",
-  },
-  {
-    id: "NER-TRK-007",
-    vehicleNumber: "AR01-TR-7814",
-    name: "Itanagar Supply",
-    latitude: 27.0844,
-    longitude: 93.6053,
-    route: "Itanagar → Guwahati",
-    state: "Arunachal Pradesh",
-    status: "Idle",
-  },
-  {
-    id: "NER-TRK-008",
-    vehicleNumber: "MZ01-TR-8945",
-    name: "Aizawl Logistics",
-    latitude: 23.7271,
-    longitude: 92.7176,
-    route: "Aizawl → Silchar",
-    state: "Mizoram",
-    status: "Moving",
-  },
-  {
-    id: "NER-TRK-009",
-    vehicleNumber: "SK01-TR-9156",
-    name: "Gangtok Cargo",
-    latitude: 27.3389,
-    longitude: 88.6065,
-    route: "Gangtok → Siliguri",
-    state: "Sikkim",
-    status: "In Transit",
+    id: "route-market",
+    name: "Local Trade Corridor",
+    label: "Low Cost",
+
+    coordinates: [
+      DEFAULT_ORIGIN,
+      { latitude: 26.1295, longitude: 91.7318 },
+      { latitude: 26.0752, longitude: 91.7826 },
+      { latitude: 25.9128, longitude: 91.8264 },
+      { latitude: 25.8421, longitude: 91.8669 },
+      DEFAULT_DESTINATION,
+    ],
+
+    distanceKm: 101.5,
+    etaMin: 188,
+
+    traffic: {
+      level: "moderate",
+      congestion: 49,
+      delayMin: 13,
+      speedKmh: 32,
+      incidents: 1,
+      closure: false,
+    },
+
+    road: {
+      quality: 76,
+      potholes: 6,
+      construction: 0,
+      closures: 0,
+      floodRisk: 21,
+      waterloggingRisk: 27,
+      narrowRoads: 3,
+      sharpTurns: 5,
+      steepSlopes: 2,
+      accidentProne: 13,
+      exposedSections: 1,
+    },
+
+    safety: 83,
+    toll: 0,
+    fuelLiters: 18.2,
+    fuelCost: 1620,
+    co2Kg: 42.3,
+    rainExposure: 23,
+    chargingStations: 1,
+
+    hazards: [
+      {
+        id: "ner-h4",
+        type: "pothole",
+        title: "Poor road surface",
+        description:
+          "Multiple potholes reported along the local trade corridor.",
+        severity: SEVERITY.WARNING,
+        coordinate: {
+          latitude: 26.0752,
+          longitude: 91.7826,
+        },
+      },
+
+      {
+        id: "ner-h5",
+        type: "waterlogging",
+        title: "Heavy rain risk",
+        description:
+          "Low-lying road section may experience waterlogging during heavy rainfall.",
+        severity: SEVERITY.WARNING,
+        coordinate: {
+          latitude: 25.9128,
+          longitude: 91.8264,
+        },
+      },
+    ],
   },
 ];
 
-/* ============================================================
+/* =========================================================
    MAIN SCREEN
-============================================================ */
+========================================================= */
 
 export default function SmartRouteScreen() {
   const mapRef = useRef(null);
 
-  const [searchVisible, setSearchVisible] = useState(false);
-  const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("");
+  const [currentLocation, setCurrentLocation] =
+    useState(DEFAULT_ORIGIN);
 
-  const [selectedTruck, setSelectedTruck] = useState(null);
-  const [navigationStarted, setNavigationStarted] = useState(false);
+  const [destination, setDestination] =
+    useState(DEFAULT_DESTINATION);
 
-  /*
-   * Demo current location.
-   * Isko baad mein actual GPS location se replace kar sakte ho.
-   */
-  const currentLocation = {
-    latitude: 26.1445,
-    longitude: 91.7362,
-  };
+  const [showRoute, setShowRoute] = useState(false);
 
-  /* ============================================================
-     SEARCH
-  ============================================================ */
+  const [selectedRouteId, setSelectedRouteId] =
+    useState("route-main");
 
-  const filteredTrucks = NER_DUMMY_DATA.filter((truck) => {
-    const search = query.toLowerCase();
+  const [isSearching, setIsSearching] = useState(false);
 
-    return (
-      truck.name.toLowerCase().includes(search) ||
-      truck.vehicleNumber.toLowerCase().includes(search) ||
-      truck.state.toLowerCase().includes(search) ||
-      truck.route.toLowerCase().includes(search)
-    );
-  });
+  const [locationLoading, setLocationLoading] =
+    useState(true);
 
-  /* ============================================================
-     SELECT TRUCK
-  ============================================================ */
+  const [selectedHazard, setSelectedHazard] =
+    useState(null);
 
-  const selectTruck = (truck) => {
-    setSelectedTruck(truck);
-    setSearchVisible(false);
-    setQuery("");
-    setNavigationStarted(false);
+  const pulse = useRef(new Animated.Value(1)).current;
 
-    setTimeout(() => {
-      mapRef.current?.animateToRegion(
-        {
-          latitude: truck.latitude,
-          longitude: truck.longitude,
-          latitudeDelta: 3,
-          longitudeDelta: 3,
-        },
-        700
-      );
-    }, 300);
-  };
+  /* =========================================================
+     LOCATION PERMISSION + LIVE TRACKING
+  ========================================================= */
 
-  /* ============================================================
-     START NAVIGATION
-  ============================================================ */
+  useEffect(() => {
+    let subscription;
 
-  const startNavigation = () => {
-    if (!selectedTruck) {
-      Alert.alert("Select Truck", "Please select a truck first.");
-      return;
-    }
+    const startLocationTracking = async () => {
+      try {
+        const { status } =
+          await Location.requestForegroundPermissionsAsync();
 
-    setNavigationStarted(true);
-
-    setTimeout(() => {
-      mapRef.current?.fitToCoordinates(
-        [
-          currentLocation,
-          {
-            latitude: selectedTruck.latitude,
-            longitude: selectedTruck.longitude,
-          },
-        ],
-        {
-          edgePadding: {
-            top: 120,
-            right: 50,
-            bottom: 220,
-            left: 50,
-          },
-          animated: true,
+        if (status !== "granted") {
+          setLocationLoading(false);
+          return;
         }
-      );
+
+        const initial =
+          await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+          });
+
+        const coords = {
+          latitude: initial.coords.latitude,
+          longitude: initial.coords.longitude,
+        };
+
+        setCurrentLocation(coords);
+
+        /*
+         * Live location watcher
+         */
+        subscription =
+          await Location.watchPositionAsync(
+            {
+              accuracy: Location.Accuracy.High,
+              timeInterval: 5000,
+              distanceInterval: 10,
+            },
+            (position) => {
+              const newCoords = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              };
+
+              setCurrentLocation(newCoords);
+            }
+          );
+      } catch (error) {
+        console.log("Location error:", error);
+      } finally {
+        setLocationLoading(false);
+      }
+    };
+
+    startLocationTracking();
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, []);
+
+  /* =========================================================
+     LIVE LOCATION PULSE
+  ========================================================= */
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1.35,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
+  /* =========================================================
+     SELECTED ROUTE
+  ========================================================= */
+
+  const selectedRoute = useMemo(() => {
+    return (
+      MOCK_ROUTES.find(
+        (route) => route.id === selectedRouteId
+      ) || MOCK_ROUTES[0]
+    );
+  }, [selectedRouteId]);
+
+  /* =========================================================
+     SEARCH
+  ========================================================= */
+
+  const searchLocation = async () => {
+    if (!location.trim()) return;
+
+    setIsSearching(true);
+
+    try {
+      /*
+       * Demo geocoding.
+       *
+       * Real app:
+       * Google Places API
+       * Google Geocoding API
+       */
+
+      const results =
+        await Location.geocodeAsync(location.trim());
+
+      if (results.length > 0) {
+        const result = results[0];
+
+        const newDestination = {
+          latitude: result.latitude,
+          longitude: result.longitude,
+        };
+
+        setDestination(newDestination);
+        setShowRoute(true);
+
+        /*
+         * Move map to destination
+         */
+        mapRef.current?.animateToRegion(
+          {
+            ...newDestination,
+            latitudeDelta: 0.08,
+            longitudeDelta: 0.08,
+          },
+          1000
+        );
+      } else {
+        /*
+         * Fallback demo
+         */
+        setDestination(DEFAULT_DESTINATION);
+        setShowRoute(true);
+      }
+    } catch (error) {
+      console.log("Search error:", error);
+
+      setDestination(DEFAULT_DESTINATION);
+      setShowRoute(true);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  /* =========================================================
+     CURRENT LOCATION BUTTON
+  ========================================================= */
+
+  const goToCurrentLocation = () => {
+    mapRef.current?.animateToRegion(
+      {
+        ...currentLocation,
+        latitudeDelta: 0.04,
+        longitudeDelta: 0.04,
+      },
+      800
+    );
+  };
+
+  /* =========================================================
+     FIT ROUTE
+  ========================================================= */
+
+  const fitRoute = () => {
+    if (!mapRef.current) return;
+
+    mapRef.current.fitToCoordinates(
+      [
+        currentLocation,
+        destination,
+        ...selectedRoute.coordinates,
+      ],
+      {
+        edgePadding: {
+          top: 120,
+          right: 40,
+          bottom: 360,
+          left: 40,
+        },
+        animated: true,
+      }
+    );
+  };
+
+  /* =========================================================
+     SELECT ROUTE
+  ========================================================= */
+
+  const selectRoute = (routeId) => {
+    setSelectedRouteId(routeId);
+    setSelectedHazard(null);
+
+    setTimeout(() => {
+      fitRoute();
     }, 200);
+  };
+
+  /* =========================================================
+     FORMAT ETA
+  ========================================================= */
+
+  const formatEta = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+
+    if (hours === 0) return `${mins} min`;
+
+    return `${hours}h ${mins}m`;
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
+      {/* =====================================================
+          SEARCH BAR
+      ===================================================== */}
 
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>Smart Route</Text>
-          <Text style={styles.subtitle}>North East Vehicle Tracking</Text>
-        </View>
+      <View style={styles.searchWrapper}>
+        <View style={styles.searchBox}>
+          <Text style={styles.searchIcon}>⌕</Text>
 
-        <View style={styles.liveBadge}>
-          <View style={styles.liveDot} />
-          <Text style={styles.liveText}>LIVE</Text>
+          <TextInput
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Where do you want to go?"
+            placeholderTextColor="#94A3B8"
+            style={styles.input}
+            returnKeyType="search"
+            onSubmitEditing={searchLocation}
+          />
+
+          {location.length > 0 && (
+            <Pressable
+              onPress={() => setLocation("")}
+            >
+              <Text style={styles.clear}>×</Text>
+            </Pressable>
+          )}
+
+          <Pressable
+            style={styles.searchButton}
+            onPress={searchLocation}
+          >
+            {isSearching ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.searchButtonText}>
+                Search
+              </Text>
+            )}
+          </Pressable>
         </View>
       </View>
 
-      {/* ======================================================
-          SEARCH BAR
-      ====================================================== */}
-
-      <Pressable
-        style={styles.searchBar}
-        onPress={() => setSearchVisible(true)}
-      >
-        <Ionicons name="search" size={20} color="#64748B" />
-
-        <View style={{ flex: 1 }}>
-          <Text style={styles.searchLabel}>SEARCH VEHICLE / ROUTE</Text>
-
-          <Text
-            style={[
-              styles.searchValue,
-              !selectedTruck && styles.placeholder,
-            ]}
-          >
-            {selectedTruck
-              ? `${selectedTruck.name} · ${selectedTruck.vehicleNumber}`
-              : "Search North East vehicle"}
-          </Text>
-        </View>
-
-        <Ionicons name="chevron-forward" size={20} color="#64748B" />
-      </Pressable>
-
-      {/* ======================================================
+      {/* =====================================================
           MAP
-      ====================================================== */}
+      ===================================================== */}
 
-      <View style={styles.mapContainer}>
-        <MapView
-          ref={mapRef}
-          style={StyleSheet.absoluteFill}
-          initialRegion={{
-            latitude: 25.8,
-            longitude: 91.8,
-            latitudeDelta: 8,
-            longitudeDelta: 7,
-          }}
-          showsCompass
-          showsUserLocation={false}
+      <MapView
+        ref={mapRef}
+        provider={
+          Platform.OS === "android"
+            ? PROVIDER_GOOGLE
+            : undefined
+        }
+        style={styles.map}
+        showsUserLocation={false}
+        showsMyLocationButton={false}
+        showsCompass={true}
+        showsTraffic={true}
+        initialRegion={{
+          ...DEFAULT_ORIGIN,
+          latitudeDelta: 0.08,
+          longitudeDelta: 0.08,
+        }}
+        onMapReady={() => {
+          if (showRoute) {
+            fitRoute();
+          }
+        }}
+      >
+        {/* =================================================
+            LIVE USER MARKER
+        ================================================= */}
+
+        <Marker
+          coordinate={currentLocation}
+          anchor={{ x: 0.5, y: 0.5 }}
+          title="Your current location"
         >
-          {/* CURRENT LOCATION */}
+          <View style={styles.locationMarker}>
+            <Animated.View
+              style={[
+                styles.locationPulse,
+                {
+                  transform: [{ scale: pulse }],
+                },
+              ]}
+            />
 
+            <View style={styles.locationDot}>
+              <View style={styles.locationDotInner} />
+            </View>
+          </View>
+        </Marker>
+
+        {/* =================================================
+            DESTINATION
+        ================================================= */}
+
+        {showRoute && (
           <Marker
-            coordinate={currentLocation}
-            title="Current Location"
+            coordinate={destination}
+            title={location || "Destination"}
           >
-            <View style={styles.currentMarker}>
-              <View style={styles.currentMarkerInner} />
+            <View style={styles.destinationMarker}>
+              <Text style={styles.destinationIcon}>
+                📍
+              </Text>
             </View>
           </Marker>
+        )}
 
-          {/* NORTH EAST VEHICLES */}
+        {/* =================================================
+            ROUTES
+        ================================================= */}
 
-          {NER_DUMMY_DATA.map((truck) => {
-            const selected = selectedTruck?.id === truck.id;
+        {showRoute &&
+          MOCK_ROUTES.map((route) => {
+            const active =
+              route.id === selectedRouteId;
 
             return (
-              <Marker
-                key={truck.id}
-                coordinate={{
-                  latitude: truck.latitude,
-                  longitude: truck.longitude,
-                }}
-                title={truck.name}
-                description={`${truck.vehicleNumber} · ${truck.status}`}
-                onPress={() => selectTruck(truck)}
-              >
-                <View
-                  style={[
-                    styles.truckMarker,
-                    selected && styles.selectedTruckMarker,
-                    truck.status === "Idle" && styles.idleMarker,
-                  ]}
-                >
-                  <Ionicons
-                    name="car"
-                    size={17}
-                    color="#FFFFFF"
-                  />
-                </View>
-              </Marker>
+              <Polyline
+                key={route.id}
+                coordinates={[
+                  currentLocation,
+                  ...route.coordinates.slice(1, -1),
+                  destination,
+                ]}
+                strokeColor={
+                  active
+                    ? "#2563EB"
+                    : "#94A3B8"
+                }
+                strokeWidth={active ? 6 : 3}
+                lineCap="round"
+                lineJoin="round"
+                zIndex={active ? 10 : 1}
+              />
             );
           })}
 
-          {/* ==================================================
-              ROUTE
-          ================================================== */}
+        {/* =================================================
+            HAZARDS
+        ================================================= */}
 
-          {navigationStarted && selectedTruck && (
-            <Polyline
-              coordinates={[
-                currentLocation,
-                {
-                  latitude: selectedTruck.latitude,
-                  longitude: selectedTruck.longitude,
-                },
-              ]}
-              strokeColor="#2563EB"
-              strokeWidth={6}
-            />
-          )}
-        </MapView>
+        {showRoute &&
+          selectedRoute.hazards.map((hazard) => (
+            <Marker
+              key={hazard.id}
+              coordinate={hazard.coordinate}
+              onPress={() =>
+                setSelectedHazard(hazard)
+              }
+            >
+              <View
+                style={[
+                  styles.hazardMarker,
+                  hazard.severity ===
+                    SEVERITY.DANGER &&
+                    styles.dangerMarker,
+                ]}
+              >
+                <Text style={styles.hazardText}>
+                  {hazard.type ===
+                  "waterlogging"
+                    ? "💧"
+                    : hazard.type ===
+                      "accident"
+                    ? "⚠️"
+                    : hazard.type ===
+                      "construction"
+                    ? "🚧"
+                    : "🕳️"}
+                </Text>
+              </View>
+            </Marker>
+          ))}
+      </MapView>
 
-        {/* MAP INFO */}
+      {/* =====================================================
+          MAP FLOATING BUTTONS
+      ===================================================== */}
 
-        <View style={styles.mapInfo}>
-          <View style={styles.mapInfoRow}>
-            <View
-              style={[
-                styles.legendDot,
-                { backgroundColor: "#2563EB" },
-              ]}
-            />
+      <View style={styles.mapControls}>
+        <Pressable
+          style={styles.mapButton}
+          onPress={goToCurrentLocation}
+        >
+          <Text style={styles.mapButtonText}>
+            ◎
+          </Text>
+        </Pressable>
 
-            <Text style={styles.mapInfoText}>
-              Your Location
-            </Text>
-          </View>
-
-          <View style={styles.mapInfoRow}>
-            <View
-              style={[
-                styles.legendDot,
-                { backgroundColor: "#16A34A" },
-              ]}
-            />
-
-            <Text style={styles.mapInfoText}>
-              North East Vehicles
-            </Text>
-          </View>
-        </View>
+        <Pressable
+          style={styles.mapButton}
+          onPress={fitRoute}
+        >
+          <Text style={styles.mapButtonText}>
+            ↗
+          </Text>
+        </Pressable>
       </View>
 
-      {/* ======================================================
-          SELECTED VEHICLE CARD
-      ====================================================== */}
+      {/* =====================================================
+          LOCATION STATUS
+      ===================================================== */}
 
-      {selectedTruck && (
-        <View style={styles.vehicleCard}>
-          <View style={styles.vehicleHeader}>
-            <View style={styles.vehicleIcon}>
-              <Ionicons
-                name="car"
-                size={22}
-                color="#2563EB"
-              />
-            </View>
+      {locationLoading && (
+        <View style={styles.locationStatus}>
+          <ActivityIndicator
+            size="small"
+            color="#2563EB"
+          />
 
-            <View style={{ flex: 1 }}>
-              <Text style={styles.vehicleName}>
-                {selectedTruck.name}
-              </Text>
-
-              <Text style={styles.vehicleNumber}>
-                {selectedTruck.vehicleNumber}
-              </Text>
-            </View>
-
-            <View style={styles.statusBadge}>
-              <View style={styles.statusDot} />
-              <Text style={styles.statusText}>
-                {selectedTruck.status}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.routeInfo}>
-            <Ionicons
-              name="navigate-outline"
-              size={18}
-              color="#2563EB"
-            />
-
-            <Text style={styles.routeText}>
-              {selectedTruck.route}
-            </Text>
-          </View>
-
-          <View style={styles.locationInfo}>
-            <Ionicons
-              name="location-outline"
-              size={17}
-              color="#64748B"
-            />
-
-            <Text style={styles.coordinates}>
-              {selectedTruck.latitude.toFixed(4)},{" "}
-              {selectedTruck.longitude.toFixed(4)}
-            </Text>
-          </View>
-
-          {/* START NAVIGATION */}
-
-          <Pressable
-            style={styles.navigationButton}
-            onPress={startNavigation}
-          >
-            <Ionicons
-              name="navigate"
-              size={20}
-              color="#FFFFFF"
-            />
-
-            <Text style={styles.navigationText}>
-              {navigationStarted
-                ? "Route Showing"
-                : "Start Navigation"}
-            </Text>
-          </Pressable>
+          <Text style={styles.locationStatusText}>
+            Getting your current location...
+          </Text>
         </View>
       )}
 
-      {/* ======================================================
-          SEARCH MODAL
-      ====================================================== */}
+      {/* =====================================================
+          HAZARD POPUP
+      ===================================================== */}
 
-      <Modal
-        visible={searchVisible}
-        animationType="slide"
-        onRequestClose={() => setSearchVisible(false)}
-      >
-        <SafeAreaView style={styles.modal}>
-          {/* HEADER */}
-
-          <View style={styles.modalHeader}>
-            <Pressable
-              style={styles.closeButton}
-              onPress={() => setSearchVisible(false)}
-            >
-              <Ionicons
-                name="close"
-                size={24}
-                color="#0F172A"
-              />
-            </Pressable>
-
-            <Text style={styles.modalTitle}>
-              Search Vehicle
+      {selectedHazard && (
+        <View style={styles.hazardCard}>
+          <View style={styles.hazardHeader}>
+            <Text style={styles.hazardTitle}>
+              {selectedHazard.title}
             </Text>
+
+            <Pressable
+              onPress={() =>
+                setSelectedHazard(null)
+              }
+            >
+              <Text style={styles.closeText}>
+                ×
+              </Text>
+            </Pressable>
           </View>
 
-          {/* SEARCH */}
-
-          <View style={styles.modalSearch}>
-            <Ionicons
-              name="search"
-              size={20}
-              color="#64748B"
-            />
-
-            <TextInput
-              value={query}
-              onChangeText={setQuery}
-              placeholder="Vehicle, route or state"
-              placeholderTextColor="#94A3B8"
-              style={styles.input}
-              autoFocus
-            />
-          </View>
-
-          <Text style={styles.resultLabel}>
-            NORTH EAST VEHICLES
+          <Text style={styles.hazardDescription}>
+            {selectedHazard.description}
           </Text>
+        </View>
+      )}
 
-          {/* RESULTS */}
+      {/* =====================================================
+          BOTTOM PANEL
+      ===================================================== */}
 
-          <ScrollView>
-            {filteredTrucks.map((truck) => (
-              <Pressable
-                key={truck.id}
-                style={styles.resultCard}
-                onPress={() => selectTruck(truck)}
+      {showRoute && (
+        <View style={styles.bottomPanel}>
+          <View style={styles.dragHandle} />
+
+          {/* Header */}
+
+          <View style={styles.routeHeader}>
+            <View>
+              <View style={styles.liveRow}>
+                <View style={styles.liveDot} />
+
+                <Text style={styles.liveText}>
+                  LIVE ROUTE
+                </Text>
+              </View>
+
+              <Text style={styles.routeName}>
+                {selectedRoute.name}
+              </Text>
+            </View>
+
+            <View style={styles.bestBadge}>
+              <Text style={styles.bestBadgeText}>
+                {selectedRoute.label}
+              </Text>
+            </View>
+          </View>
+
+          {/* Main stats */}
+
+          <View style={styles.mainStats}>
+            <View>
+              <Text style={styles.bigValue}>
+                {selectedRoute.distanceKm}
+                <Text style={styles.unit}>
+                  {" "}
+                  km
+                </Text>
+              </Text>
+
+              <Text style={styles.statLabel}>
+                Distance
+              </Text>
+            </View>
+
+            <View style={styles.verticalLine} />
+
+            <View>
+              <Text style={styles.bigValue}>
+                {formatEta(
+                  selectedRoute.etaMin
+                )}
+              </Text>
+
+              <Text style={styles.statLabel}>
+                Estimated time
+              </Text>
+            </View>
+
+            <View style={styles.verticalLine} />
+
+            <View>
+              <Text
+                style={[
+                  styles.bigValue,
+                  {
+                    color:
+                      selectedRoute.safety >=
+                      90
+                        ? "#16A34A"
+                        : "#F59E0B",
+                  },
+                ]}
               >
-                <View style={styles.resultIcon}>
-                  <Ionicons
-                    name="car"
-                    size={20}
-                    color="#2563EB"
-                  />
-                </View>
+                {selectedRoute.safety}%
+              </Text>
 
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.resultName}>
-                    {truck.name}
-                  </Text>
+              <Text style={styles.statLabel}>
+                Safety
+              </Text>
+            </View>
+          </View>
 
-                  <Text style={styles.resultVehicle}>
-                    {truck.vehicleNumber}
-                  </Text>
+          {/* Route selector */}
 
-                  <Text style={styles.resultRoute}>
-                    {truck.route}
-                  </Text>
+          <View style={styles.routeSelector}>
+            {MOCK_ROUTES.map((route) => {
+              const active =
+                route.id === selectedRouteId;
 
-                  <Text style={styles.resultState}>
-                    {truck.state}
-                  </Text>
-                </View>
-
-                <View
+              return (
+                <Pressable
+                  key={route.id}
+                  onPress={() =>
+                    selectRoute(route.id)
+                  }
                   style={[
-                    styles.resultStatus,
-                    truck.status === "Idle" &&
-                      styles.idleStatus,
+                    styles.routeTab,
+                    active &&
+                      styles.activeRouteTab,
                   ]}
                 >
                   <Text
                     style={[
-                      styles.resultStatusText,
-                      truck.status === "Idle" &&
-                        styles.idleStatusText,
+                      styles.routeTabText,
+                      active &&
+                        styles.activeRouteTabText,
                     ]}
                   >
-                    {truck.status}
+                    {route.label}
                   </Text>
-                </View>
-              </Pressable>
-            ))}
 
-            {filteredTrucks.length === 0 && (
-              <View style={styles.empty}>
-                <Ionicons
-                  name="search-outline"
-                  size={40}
-                  color="#94A3B8"
-                />
+                  <Text
+                    style={[
+                      styles.routeTabTime,
+                      active &&
+                        styles.activeRouteTabText,
+                    ]}
+                  >
+                    {formatEta(
+                      route.etaMin
+                    )}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
 
-                <Text style={styles.emptyText}>
-                  No vehicle found
+          {/* Feature cards */}
+
+          <View style={styles.featuresGrid}>
+            <Feature
+              icon="🚦"
+              title="Traffic"
+              value={
+                selectedRoute.traffic
+                  .level
+              }
+              color={
+                selectedRoute.traffic
+                  .congestion > 60
+                  ? "#EF4444"
+                  : "#F59E0B"
+              }
+            />
+
+            <Feature
+              icon="🛣️"
+              title="Road"
+              value={`${selectedRoute.road.quality}%`}
+              color="#16A34A"
+            />
+
+            <Feature
+              icon="💰"
+              title="Toll"
+              value={`₹${selectedRoute.toll}`}
+              color="#2563EB"
+            />
+
+            <Feature
+              icon="⛽"
+              title="Fuel"
+              value={`${selectedRoute.fuelLiters} L`}
+              color="#7C3AED"
+            />
+
+            <Feature
+              icon="🌧️"
+              title="Rain"
+              value={`${selectedRoute.rainExposure}%`}
+              color="#0891B2"
+            />
+
+            <Feature
+              icon="⚡"
+              title="EV Charge"
+              value={`${selectedRoute.chargingStations}`}
+              color="#16A34A"
+            />
+          </View>
+
+          {/* Warning */}
+
+          {selectedRoute.traffic.incidents >
+            0 && (
+            <View style={styles.warningBox}>
+              <Text style={styles.warningIcon}>
+                ⚠️
+              </Text>
+
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={styles.warningTitle}
+                >
+                  Traffic alert
+                </Text>
+
+                <Text
+                  style={styles.warningText}
+                >
+                  {selectedRoute.traffic.incidents}{" "}
+                  incident(s) reported.
+                  Expect around{" "}
+                  {selectedRoute.traffic.delayMin}{" "}
+                  min delay.
                 </Text>
               </View>
-            )}
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
+            </View>
+          )}
+
+          {/* Navigation */}
+
+          <Pressable
+            style={styles.startButton}
+            onPress={fitRoute}
+          >
+            <Text style={styles.startIcon}>
+              ➤
+            </Text>
+
+            <Text style={styles.startText}>
+              Start Navigation
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
 
-/* ============================================================
+/* =========================================================
+   FEATURE COMPONENT
+========================================================= */
+
+function Feature({
+  icon,
+  title,
+  value,
+  color,
+}) {
+  return (
+    <View style={styles.featureCard}>
+      <View
+        style={[
+          styles.featureIcon,
+          {
+            backgroundColor:
+              `${color}15`,
+          },
+        ]}
+      >
+        <Text>{icon}</Text>
+      </View>
+
+      <View style={{ flex: 1 }}>
+        <Text style={styles.featureTitle}>
+          {title}
+        </Text>
+
+        <Text
+          style={[
+            styles.featureValue,
+            { color },
+          ]}
+        >
+          {value}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+/* =========================================================
    STYLES
-============================================================ */
+========================================================= */
 
 const styles = StyleSheet.create({
   container: {
@@ -577,395 +1112,473 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
 
-  header: {
-    height: 68,
-    paddingHorizontal: 16,
+  searchWrapper: {
+    position: "absolute",
+    top: 12,
+    left: 12,
+    right: 12,
+    zIndex: 100,
+  },
+
+  searchBox: {
+    height: 56,
     backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 14,
+    paddingRight: 6,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+
+    elevation: 8,
+  },
+
+  searchIcon: {
+    fontSize: 26,
+    color: "#64748B",
+    marginRight: 8,
+  },
+
+  input: {
+    flex: 1,
+    fontSize: 15,
+    color: "#0F172A",
+  },
+
+  clear: {
+    fontSize: 26,
+    color: "#94A3B8",
+    paddingHorizontal: 8,
+  },
+
+  searchButton: {
+    height: 44,
+    paddingHorizontal: 15,
+    borderRadius: 14,
+    backgroundColor: "#2563EB",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  searchButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "800",
+  },
+
+  map: {
+    flex: 1,
+  },
+
+  /* Live location */
+
+  locationMarker: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  locationPulse: {
+    position: "absolute",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#2563EB30",
+  },
+
+  locationDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+  },
+
+  locationDotInner: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: "#2563EB",
+  },
+
+  destinationMarker: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 6,
+  },
+
+  destinationIcon: {
+    fontSize: 27,
+  },
+
+  hazardMarker: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: "#FEF3C7",
+    borderWidth: 2,
+    borderColor: "#F59E0B",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  dangerMarker: {
+    backgroundColor: "#FEE2E2",
+    borderColor: "#EF4444",
+  },
+
+  hazardText: {
+    fontSize: 18,
+  },
+
+  /* Floating buttons */
+
+  mapControls: {
+    position: "absolute",
+    right: 14,
+    bottom: 355,
+    gap: 10,
+  },
+
+  mapButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 6,
+  },
+
+  mapButtonText: {
+    color: "#2563EB",
+    fontSize: 25,
+    fontWeight: "800",
+  },
+
+  /* Status */
+
+  locationStatus: {
+    position: "absolute",
+    top: 78,
+    left: 20,
+    right: 20,
+    height: 40,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    elevation: 5,
+  },
+
+  locationStatusText: {
+    marginLeft: 8,
+    fontSize: 12,
+    color: "#475569",
+  },
+
+  /* Hazard */
+
+  hazardCard: {
+    position: "absolute",
+    left: 16,
+    right: 16,
+    bottom: 355,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    padding: 16,
+    elevation: 10,
+  },
+
+  hazardHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E2E8F0",
   },
 
-  title: {
-    fontSize: 20,
+  hazardTitle: {
+    fontSize: 15,
     fontWeight: "900",
     color: "#0F172A",
   },
 
-  subtitle: {
-    fontSize: 10,
+  closeText: {
+    fontSize: 24,
     color: "#64748B",
-    marginTop: 2,
   },
 
-  liveBadge: {
+  hazardDescription: {
+    marginTop: 7,
+    fontSize: 12,
+    lineHeight: 18,
+    color: "#64748B",
+  },
+
+  /* Bottom */
+
+  bottomPanel: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#FFFFFF",
+
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+
+    paddingHorizontal: 18,
+    paddingTop: 9,
+    paddingBottom: 14,
+
+    elevation: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.18,
+    shadowRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: -5,
+    },
+  },
+
+  dragHandle: {
+    width: 42,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: "#CBD5E1",
+    alignSelf: "center",
+    marginBottom: 13,
+  },
+
+  routeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  liveRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#DCFCE7",
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    borderRadius: 20,
+    marginBottom: 3,
   },
 
   liveDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: "#16A34A",
-    marginRight: 5,
+    backgroundColor: "#22C55E",
+    marginRight: 6,
   },
 
   liveText: {
-    fontSize: 9,
+    fontSize: 10,
+    color: "#16A34A",
     fontWeight: "900",
-    color: "#15803D",
-  },
-
-  searchBar: {
-    margin: 14,
-    padding: 14,
-    borderRadius: 16,
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-  },
-
-  searchLabel: {
-    fontSize: 8,
-    fontWeight: "900",
-    color: "#64748B",
     letterSpacing: 0.7,
   },
 
-  searchValue: {
-    fontSize: 13,
-    fontWeight: "800",
-    color: "#0F172A",
-    marginTop: 3,
-  },
-
-  placeholder: {
-    color: "#94A3B8",
-  },
-
-  mapContainer: {
-    flex: 1,
-    marginHorizontal: 14,
-    marginBottom: 10,
-    borderRadius: 22,
-    overflow: "hidden",
-  },
-
-  currentMarker: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "rgba(37,99,235,0.25)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  currentMarkerInner: {
-    width: 13,
-    height: 13,
-    borderRadius: 7,
-    backgroundColor: "#2563EB",
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
-  },
-
-  truckMarker: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: "#16A34A",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
-  },
-
-  selectedTruckMarker: {
-    backgroundColor: "#2563EB",
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-  },
-
-  idleMarker: {
-    backgroundColor: "#64748B",
-  },
-
-  mapInfo: {
-    position: "absolute",
-    left: 12,
-    bottom: 12,
-    backgroundColor: "rgba(255,255,255,0.95)",
-    borderRadius: 12,
-    padding: 10,
-  },
-
-  mapInfoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 3,
-  },
-
-  legendDot: {
-    width: 9,
-    height: 9,
-    borderRadius: 5,
-    marginRight: 7,
-  },
-
-  mapInfoText: {
-    fontSize: 9,
-    fontWeight: "800",
-    color: "#334155",
-  },
-
-  vehicleCard: {
-    backgroundColor: "#FFFFFF",
-    marginHorizontal: 14,
-    marginBottom: 10,
-    padding: 15,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-  },
-
-  vehicleHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  vehicleIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 13,
-    backgroundColor: "#EFF6FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
-  },
-
-  vehicleName: {
-    fontSize: 14,
+  routeName: {
+    fontSize: 18,
     fontWeight: "900",
     color: "#0F172A",
   },
 
-  vehicleNumber: {
-    fontSize: 10,
-    color: "#64748B",
-    marginTop: 3,
-  },
-
-  statusBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#DCFCE7",
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-    borderRadius: 10,
-  },
-
-  statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#16A34A",
-    marginRight: 5,
-  },
-
-  statusText: {
-    fontSize: 9,
-    fontWeight: "800",
-    color: "#15803D",
-  },
-
-  routeInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 13,
-  },
-
-  routeText: {
-    fontSize: 11,
-    fontWeight: "800",
-    color: "#334155",
-    marginLeft: 7,
-  },
-
-  locationInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 7,
-  },
-
-  coordinates: {
-    fontSize: 9,
-    color: "#64748B",
-    marginLeft: 7,
-  },
-
-  navigationButton: {
-    height: 50,
-    borderRadius: 14,
-    backgroundColor: "#2563EB",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 14,
-  },
-
-  navigationText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "900",
-    marginLeft: 7,
-  },
-
-  modal: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-
-  modalHeader: {
-    height: 65,
-    flexDirection: "row",
-    alignItems: "center",
+  bestBadge: {
     paddingHorizontal: 10,
-  },
-
-  closeButton: {
-    width: 44,
-    height: 44,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  modalTitle: {
-    fontSize: 19,
-    fontWeight: "900",
-    color: "#0F172A",
-  },
-
-  modalSearch: {
-    height: 52,
-    marginHorizontal: 16,
-    paddingHorizontal: 14,
-    borderRadius: 15,
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-  },
-
-  input: {
-    flex: 1,
-    height: "100%",
-    marginLeft: 9,
-    fontSize: 14,
-    color: "#0F172A",
-  },
-
-  resultLabel: {
-    marginHorizontal: 16,
-    marginTop: 20,
-    marginBottom: 8,
-    fontSize: 10,
-    fontWeight: "900",
-    color: "#64748B",
-    letterSpacing: 1,
-  },
-
-  resultCard: {
-    marginHorizontal: 14,
-    padding: 13,
-    minHeight: 90,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    marginBottom: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-  },
-
-  resultIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 13,
+    paddingVertical: 7,
+    borderRadius: 10,
     backgroundColor: "#EFF6FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
   },
 
-  resultName: {
-    fontSize: 13,
+  bestBadgeText: {
+    fontSize: 10,
+    color: "#2563EB",
+    fontWeight: "900",
+  },
+
+  mainStats: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 17,
+    marginBottom: 14,
+  },
+
+  bigValue: {
+    fontSize: 20,
     fontWeight: "900",
     color: "#0F172A",
   },
 
-  resultVehicle: {
-    fontSize: 10,
+  unit: {
+    fontSize: 12,
     fontWeight: "700",
-    color: "#64748B",
-    marginTop: 2,
   },
 
-  resultRoute: {
+  statLabel: {
+    marginTop: 3,
     fontSize: 10,
-    color: "#334155",
-    marginTop: 5,
+    color: "#94A3B8",
   },
 
-  resultState: {
+  verticalLine: {
+    width: 1,
+    height: 32,
+    backgroundColor: "#E2E8F0",
+  },
+
+  /* Route selector */
+
+  routeSelector: {
+    flexDirection: "row",
+    backgroundColor: "#F1F5F9",
+    padding: 4,
+    borderRadius: 14,
+    marginBottom: 13,
+  },
+
+  routeTab: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: "center",
+    borderRadius: 11,
+  },
+
+  activeRouteTab: {
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+
+  routeTabText: {
+    fontSize: 10,
+    color: "#64748B",
+    fontWeight: "800",
+  },
+
+  routeTabTime: {
+    marginTop: 2,
+    fontSize: 11,
+    color: "#334155",
+    fontWeight: "900",
+  },
+
+  activeRouteTabText: {
+    color: "#2563EB",
+  },
+
+  /* Feature grid */
+
+  featuresGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginHorizontal: -4,
+  },
+
+  featureCard: {
+    width: "33.33%",
+    padding: 4,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  featureIcon: {
+    width: 31,
+    height: 31,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 6,
+  },
+
+  featureTitle: {
     fontSize: 9,
     color: "#94A3B8",
-    marginTop: 2,
   },
 
-  resultStatus: {
-    backgroundColor: "#DCFCE7",
-    paddingHorizontal: 7,
-    paddingVertical: 5,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-  },
-
-  resultStatusText: {
-    fontSize: 8,
+  featureValue: {
+    marginTop: 1,
+    fontSize: 11,
     fontWeight: "900",
-    color: "#15803D",
+    textTransform: "capitalize",
   },
 
-  idleStatus: {
-    backgroundColor: "#F1F5F9",
+  /* Warning */
+
+  warningBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF7ED",
+    borderWidth: 1,
+    borderColor: "#FED7AA",
+    borderRadius: 13,
+    padding: 10,
+    marginTop: 8,
   },
 
-  idleStatusText: {
-    color: "#64748B",
+  warningIcon: {
+    fontSize: 20,
+    marginRight: 9,
   },
 
-  empty: {
+  warningTitle: {
+    fontSize: 11,
+    fontWeight: "900",
+    color: "#9A3412",
+  },
+
+  warningText: {
+    marginTop: 2,
+    fontSize: 9,
+    color: "#C2410C",
+  },
+
+  /* Navigation */
+
+  startButton: {
+    height: 51,
+    borderRadius: 15,
+    backgroundColor: "#2563EB",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 80,
+    marginTop: 11,
+
+    shadowColor: "#2563EB",
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+
+    elevation: 6,
   },
 
-  emptyText: {
-    marginTop: 10,
-    color: "#64748B",
-    fontSize: 13,
-    fontWeight: "700",
+  startIcon: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    marginRight: 9,
+  },
+
+  startText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "900",
   },
 });
